@@ -1,6 +1,5 @@
 package ru.otus.spring01.questionnaire.dao;
 
-import lombok.AllArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -12,12 +11,16 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-@AllArgsConstructor
 public class QuestionDaoImpl implements QuestionDao {
 
+    private String questionsFile;
+    private Locale locale;
 
-    private final String questionsFile;
+    public QuestionDaoImpl(String questionsFile) {
+        this.questionsFile = questionsFile;
+    }
 
     @Override
     public List<Question> getQuestionList() {
@@ -28,9 +31,18 @@ public class QuestionDaoImpl implements QuestionDao {
                 Reader reader = new InputStreamReader(inputStream);
                 CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT);
 
+                int countryCSVIndex;
+                if (locale.getCountry().equalsIgnoreCase("RU")) {
+                    countryCSVIndex = 1;
+                }
+                else if (locale.getCountry().equalsIgnoreCase("EN")) {
+                    countryCSVIndex = 2;
+                }
+                else throw new IOException();
+
                 for (CSVRecord csvRecord : parser) {
-                    String question = csvRecord.get(0);
-                    String correctAnswer = csvRecord.get(1);
+                    String correctAnswer = csvRecord.get(0);
+                    String question = csvRecord.get(countryCSVIndex);
 
                     qList.add(new Question(question, correctAnswer));
                 }
@@ -42,5 +54,10 @@ public class QuestionDaoImpl implements QuestionDao {
             e.getMessage();
         }
         return qList;
+    }
+
+    @Override
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }

@@ -1,5 +1,5 @@
-Как называется изучаемый фреймворк?,Spring
-Какая дата начала этого курса? (в формате YYYY-MM-DD),2019-08-28
-В каком виде сдаются работы курса?,Pull Request
-В каком формате файл с вопросами?,CSV
-В каком формате тут описан контекст?,XML
+Spring,Как называется изучаемый фреймворк?,What's the name of the studied framework?
+2019-08-28,Какая дата начала этого курса? (в формате YYYY-MM-DD),What is start date of this course? (YYYY-MM-DD)
+Pull Request,В каком виде сдаются работы курса?,In what form shall the work of the course?
+CSV,В каком формате файл с вопросами?,What format is the question file?
+XML,В каком формате был описан контекст в первой версии программы?,In what format it has been described in the context of the first version of the program?
