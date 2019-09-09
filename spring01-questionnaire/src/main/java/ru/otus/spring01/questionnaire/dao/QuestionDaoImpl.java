@@ -3,6 +3,8 @@ package ru.otus.spring01.questionnaire.dao;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.otus.spring01.questionnaire.domain.Question;
 
 import java.io.IOException;
@@ -13,36 +15,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@Component
 public class QuestionDaoImpl implements QuestionDao {
 
-    private String questionsFile;
+    @Value("${qa.file.prefix}")
+    private String qaFilePrefix;
+    @Value("${qa.file.suffix}")
+    private String qaFileSuffix;
     private Locale locale;
 
-    public QuestionDaoImpl(String questionsFile) {
-        this.questionsFile = questionsFile;
-    }
 
     @Override
     public List<Question> getQuestionList() {
         List<Question> qList = new ArrayList<>();
+
+        String questionsFile = qaFilePrefix + locale.getCountry() + qaFileSuffix;
 
         try (InputStream inputStream = getClass().getResourceAsStream("/" + questionsFile)) {
             if (inputStream != null) {
                 Reader reader = new InputStreamReader(inputStream);
                 CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT);
 
-                int countryCSVIndex;
-                if (locale.getCountry().equalsIgnoreCase("RU")) {
-                    countryCSVIndex = 1;
-                }
-                else if (locale.getCountry().equalsIgnoreCase("EN")) {
-                    countryCSVIndex = 2;
-                }
-                else throw new IOException();
-
                 for (CSVRecord csvRecord : parser) {
+                    String question = csvRecord.get(1);
                     String correctAnswer = csvRecord.get(0);
-                    String question = csvRecord.get(countryCSVIndex);
 
                     qList.add(new Question(question, correctAnswer));
                 }

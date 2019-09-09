@@ -10,8 +10,8 @@ import java.util.Locale;
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
-    private final QuestionDao questionDao;
     private final MessageSource ms;
+    private QuestionDao questionDao;
 
     private ConsoleService cs = new ConsoleService();
     private Locale locale = new Locale("ru", "RU");
