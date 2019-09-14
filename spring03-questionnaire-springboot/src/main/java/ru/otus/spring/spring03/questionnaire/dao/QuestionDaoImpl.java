@@ -1,5 +1,7 @@
 package ru.otus.spring.spring03.questionnaire.dao;
 
+import lombok.Data;
+import lombok.Getter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@Data
 @Component
 public class QuestionDaoImpl implements QuestionDao {
 
@@ -50,10 +53,5 @@ public class QuestionDaoImpl implements QuestionDao {
             e.getMessage();
         }
         return qList;
-    }
-
-    @Override
-    public void setLocale(Locale locale) {
-        this.locale = locale;
     }
 }
