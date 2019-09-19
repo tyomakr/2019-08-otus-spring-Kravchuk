@@ -1,0 +1,47 @@
+package ru.otus.spring.spring04.questionnaire.springshell.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Service;
+import ru.otus.spring.spring04.questionnaire.springshell.domain.User;
+
+import java.util.Locale;
+
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private final MessageSource ms;
+    private ConsoleService cs = new ConsoleService();
+    private User user;
+
+    @Override
+    public User createUser() {
+        Locale lc = LocaleContextHolder.getLocale();
+        user = new User();
+
+        cs.printMsg(ms.getMessage("qs.start.firstname", null, lc));
+        String firstName = cs.readMsg();
+        if (firstName.isEmpty()) {
+            firstName = "Student";
+        }
+        user.setFirstName(firstName);
+
+        cs.printMsg(ms.getMessage("qs.start.lastname", null, lc));
+        String lastName = cs.readMsg();
+        if (lastName.isEmpty()) {
+            lastName = "Anonymous";
+        }
+        user.setLastName(lastName);
+
+        cs.printMsg(ms.getMessage("qs.start.hello", new String[]{String.valueOf(user.getUserName())}, lc));
+        return user;
+    }
+
+    @Override
+    public void setGrade(int grade) {
+        user.setTestCompleted(true);
+        user.setGrade(grade);
+    }
+}
