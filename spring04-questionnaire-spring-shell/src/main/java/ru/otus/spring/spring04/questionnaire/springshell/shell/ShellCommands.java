@@ -7,7 +7,6 @@ import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
-import org.springframework.shell.standard.ShellOption;
 import ru.otus.spring.spring04.questionnaire.springshell.domain.User;
 import ru.otus.spring.spring04.questionnaire.springshell.service.ChangeLocaleService;
 import ru.otus.spring.spring04.questionnaire.springshell.service.QuestionService;
@@ -21,6 +20,7 @@ public class ShellCommands {
 
     private final UserService userService;
     private final QuestionService questionService;
+    private final ChangeLocaleService changeLocaleService;
     private final MessageSource ms;
 
     private User user;
@@ -32,8 +32,7 @@ public class ShellCommands {
 
     @ShellMethod(value = "Change language", key = {"9", "lang", "change-language"})
     public void changeLang() {
-        ChangeLocaleService cls = new ChangeLocaleService();
-        cls.changeLocale();
+        changeLocaleService.changeLocale();
     }
 
     @ShellMethod(value = "Start answering questions", key = {"2", "start", "s", "questions"})

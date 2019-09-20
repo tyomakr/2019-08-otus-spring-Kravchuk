@@ -1,20 +1,18 @@
 package ru.otus.spring.spring04.questionnaire.springshell.config.appsettings;
 
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@Data
+@Getter
 public class AppSettingsLoader {
 
-    private final String qaFilePrefix;
-    private final String qaFileSuffix;
+    private final AppSettings appSettings;
 
     @Autowired
-    public AppSettingsLoader(AppSettings settings){
-        this.qaFilePrefix = settings.getQaFilePrefix();
-        this.qaFileSuffix = settings.getQaFileSuffix();
+    public AppSettingsLoader(AppSettings appSettings){
+        this.appSettings = appSettings;
     }
 
 }

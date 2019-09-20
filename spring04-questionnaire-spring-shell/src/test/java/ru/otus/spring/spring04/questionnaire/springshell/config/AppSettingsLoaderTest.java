@@ -24,8 +24,8 @@ class AppSettingsLoaderTest {
     @Test
     @DisplayName("корректно получает префикс и суффикс файла")
     void shouldGetQaFilePrefixAndSuffix() {
-        Assert.assertEquals(appSettingsLoader.getQaFilePrefix(), "qa_");
-        Assert.assertEquals(appSettingsLoader.getQaFileSuffix(), ".csv");
+        Assert.assertEquals(appSettingsLoader.getAppSettings().getQaFilePrefix(), "qa_");
+        Assert.assertEquals(appSettingsLoader.getAppSettings().getQaFileSuffix(), ".csv");
     }
 
 }
