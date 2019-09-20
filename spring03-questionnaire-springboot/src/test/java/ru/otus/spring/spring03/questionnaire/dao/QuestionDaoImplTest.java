@@ -25,19 +25,12 @@ class QuestionDaoImplTest {
 
     private Locale locale = new Locale("ru", "RU");
 
-    @Test
-    @DisplayName("корректно устанавливает локаль")
-    void setLocale() {
-        questionDao.setLocale(locale);
-        Assert.assertEquals(questionDao.getLocale(), locale);
-        System.out.println(questionDao.getLocale());
-    }
+
 
     @Test
     @DisplayName("корректно получает список вопросов")
     void getQuestionValidList() {
-        questionDao.setLocale(locale);
-        Assert.assertEquals(questionDao.getQuestionList().size(), 5);
-        System.out.println(questionDao.getQuestionList().size());
+        Assert.assertEquals(questionDao.getQuestionList(locale).size(), 5);
+        System.out.println(questionDao.getQuestionList(locale).size());
     }
 }

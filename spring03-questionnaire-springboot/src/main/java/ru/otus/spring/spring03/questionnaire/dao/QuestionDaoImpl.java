@@ -1,7 +1,5 @@
 package ru.otus.spring.spring03.questionnaire.dao;
 
-import lombok.Data;
-import lombok.Getter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -17,21 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-@Data
 @Component
 public class QuestionDaoImpl implements QuestionDao {
 
     private final AppSettingsLoader appSettingsLoader;
-    private Locale locale;
 
     public QuestionDaoImpl(AppSettingsLoader appSettingsLoader) {
         this.appSettingsLoader = appSettingsLoader;
     }
 
     @Override
-    public List<Question> getQuestionList() {
-        List<Question> qList = new ArrayList<>();
+    public List<Question> getQuestionList(Locale locale) {
 
+        List<Question> qList = new ArrayList<>();
         String questionsFile = appSettingsLoader.getQaFilePrefix() + locale.getCountry() + appSettingsLoader.getQaFileSuffix();
 
         try (InputStream inputStream = getClass().getResourceAsStream("/" + questionsFile)) {

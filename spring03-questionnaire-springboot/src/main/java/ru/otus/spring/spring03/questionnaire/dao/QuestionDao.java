@@ -7,7 +7,6 @@ import java.util.Locale;
 
 public interface QuestionDao {
 
-    List<Question> getQuestionList();
+    List<Question> getQuestionList(Locale locale);
 
-    void setLocale(Locale locale);
 }

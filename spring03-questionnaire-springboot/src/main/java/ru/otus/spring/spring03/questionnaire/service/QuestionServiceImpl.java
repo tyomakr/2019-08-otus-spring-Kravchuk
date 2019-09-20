@@ -5,107 +5,95 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.spring03.questionnaire.dao.QuestionDao;
 import ru.otus.spring.spring03.questionnaire.domain.Question;
 
+import java.util.List;
 import java.util.Locale;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
     private final MessageSource ms;
+    private final AvailableLocalesScannerService alss;
     private QuestionDao questionDao;
 
     private ConsoleService cs = new ConsoleService();
-    private Locale locale = new Locale("ru", "RU");
 
-
-    public QuestionServiceImpl(QuestionDao questionDao, MessageSource ms) {
+    public QuestionServiceImpl(QuestionDao questionDao, MessageSource ms, AvailableLocalesScannerService alss) {
         this.questionDao = questionDao;
         this.ms = ms;
+        this.alss = alss;
     }
 
     @Override
     public void startQuestions() {
 
-        selectLocale();
-
-        int totalQuestions = questionDao.getQuestionList().size();
+        Locale locale = selectLocale();
+        int totalQuestions = questionDao.getQuestionList(locale).size();
 
         if (totalQuestions != 0) {
-            printBundleMsg("qs.sep");
-            printBundleMsg("qs.start.lastname");
+            cs.printMsg(ms.getMessage("qs.sep", null, locale));
+            cs.printMsg(ms.getMessage("qs.start.lastname", null, locale));
             final String lastName = cs.readMsg();
 
-            printBundleMsg("qs.start.firstname");
+            cs.printMsg(ms.getMessage("qs.start.firstname", null, locale));
             final String firstName = cs.readMsg();
 
-            cs.printMsg(ms.getMessage("qs.start.hello", new String[] {firstName + " " + lastName}, locale));
-            cs.printMsg(ms.getMessage("qs.start.ans.pls", new String[] {String.valueOf(totalQuestions)}, locale));
-
+            cs.printMsg(ms.getMessage("qs.start.hello", new String[]{firstName + " " + lastName}, locale));
+            cs.printMsg(ms.getMessage("qs.start.ans.pls", new String[]{String.valueOf(totalQuestions)}, locale));
 
             int correctAnswersCounter = 0;
 
-            for (Question question : questionDao.getQuestionList()) {
-                printBundleMsg("qs.sep");
+            for (Question question : questionDao.getQuestionList(locale)) {
+                cs.printMsg(ms.getMessage("qs.sep", null, locale));
                 cs.printMsg(question.getQuestion());
-                printBundleMsg("qs.start.answer");
+                cs.printMsg(ms.getMessage("qs.start.answer", null, locale));
                 String answer = cs.readMsg().trim();
+
                 if (answer.equalsIgnoreCase(question.getCorrectAnswer())) {
-                    printBundleMsg("qs.start.answer.ok");
+                    cs.printMsg(ms.getMessage("qs.start.answer.ok", null, locale));
                     correctAnswersCounter++;
                 } else {
-                    printBundleMsg("qs.start.answer.no");
+                    cs.printMsg(ms.getMessage("qs.start.answer.no", null, locale));
                 }
 
             }
-            printBundleMsg("qs.sep");
-            cs.printMsg(ms.getMessage("qs.start.answer.total", new String[] {String.valueOf(correctAnswersCounter)}, locale));
+            cs.printMsg(ms.getMessage("qs.sep", null, locale));
+            cs.printMsg(ms.getMessage("qs.start.answer.total", new String[]{String.valueOf(correctAnswersCounter)}, locale));
         }
 
         if (totalQuestions == 0) {
-            printBundleMsg("qs.start.err.reading.file");
+            cs.printMsg(ms.getMessage("qs.start.err.reading.file", null, locale));
         }
     }
 
+    private Locale selectLocale() {
 
-    private void selectLocale() {
+        Locale selectedLocale = new Locale("ru", "RU");
+
+        List<String> avLocales = alss.getAvailableLocalesList();
+        cs.printMsg(ms.getMessage("qs.sep", null, selectedLocale));
+        cs.printMsg(ms.getMessage("qs.select.lang", null, selectedLocale));
+
+        for (int i = 1; i <= avLocales.size(); i++) {
+            cs.printMsg(i + " " + avLocales.get(i - 1));
+        }
+
         boolean isNotSelectedLocale = true;
         while (isNotSelectedLocale) {
 
-            try {
-                printBundleMsg("qs.sep");
-                printBundleMsg("qs.select.lang");
-                printBundleMsg("qs.select.rus");
-                printBundleMsg("qs.select.eng");
-                printBundleMsg("qs.select.enter.num");
-                int number = Integer.parseInt(cs.readMsg());
+            cs.printMsg(ms.getMessage("qs.select.enter.num", null, selectedLocale));
+            int number = Integer.parseInt(cs.readMsg());
 
-                switch (number) {
-
-                    case 1:
-                        locale = new Locale("ru", "RU");
-                        isNotSelectedLocale = false;
-                        questionDao.setLocale(locale);
-                        printBundleMsg("qs.select.selected.lang");
-                        break;
-
-                    case 2:
-                        locale = new Locale("en", "EN");
-                        isNotSelectedLocale = false;
-                        questionDao.setLocale(locale);
-                        printBundleMsg("qs.select.selected.lang");
-                        break;
-
-                    default:
-                        printBundleMsg("qs.select.not.sel.lang");
-                }
-
-            } catch (Exception e) {
-                printBundleMsg("qs.select.digits.only");
+            if (number <= avLocales.size()) {
+                String sl = avLocales.get(number - 1);
+                String lang = sl.substring(0,2);
+                int endInd = sl.length();
+                String country = sl.substring(3, endInd);
+                selectedLocale = new Locale(lang, country);
+                isNotSelectedLocale = false;
             }
         }
+        return selectedLocale;
     }
-
-    private void printBundleMsg(String s) {
-        cs.printMsg(ms.getMessage(s, null, locale));
-    }
-
 }
+
+
