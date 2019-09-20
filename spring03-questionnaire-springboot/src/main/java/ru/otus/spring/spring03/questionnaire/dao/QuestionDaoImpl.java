@@ -28,7 +28,7 @@ public class QuestionDaoImpl implements QuestionDao {
     public List<Question> getQuestionList(Locale locale) {
 
         List<Question> qList = new ArrayList<>();
-        String questionsFile = appSettingsLoader.getQaFilePrefix() + locale.getCountry() + appSettingsLoader.getQaFileSuffix();
+        String questionsFile = appSettingsLoader.getSettings().getQaFilePrefix() + locale.getCountry() + appSettingsLoader.getSettings().getQaFileSuffix();
 
         try (InputStream inputStream = getClass().getResourceAsStream("/" + questionsFile)) {
             if (inputStream != null) {
