@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.otus.spring</groupId>
-	<artifactId>spring03-questionnaire-springboot</artifactId>
+	<artifactId>spring04-questionnaire-spring-shell</artifactId>
 	<version>0.0.2</version>
-	<name>spring03-questionnaire-springboot</name>
-	<description>Questionnaire for Spring Boot</description>
+	<name>spring04-questionnaire-spring-shell</name>
+	<description>Questionnaire for Spring Shell</description>
 
 	<properties>
 		<java.version>1.8</java.version>
