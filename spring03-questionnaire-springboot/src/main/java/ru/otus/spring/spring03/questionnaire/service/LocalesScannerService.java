@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class LocalesScannerService {
         File i18nFolder = new File(Objects.requireNonNull(classLoader.getResource(i18nResourcesRoot)).getFile());
 
         try {
-            Files.walk(Paths.get(String.valueOf(i18nFolder))).forEach(filepath -> addFilesToList(filepath.toFile()));
+            Files.walk(Paths.get(decodeGetParameter(String.valueOf(i18nFolder)))).forEach(filepath -> addFilesToList(filepath.toFile()));
         } catch (IOException e) {
             cs.printMsg(ms.getMessage("lss.err", null, LocaleContextHolder.getLocale()));
         }
@@ -79,5 +81,9 @@ public class LocalesScannerService {
             String localeCode = file.getName().replace("messages_", "").replace(".properties", "");
             localesList.add(localeCode);
         }
+    }
+
+    private static String decodeGetParameter(String parameter) throws UnsupportedEncodingException {
+        return new String(URLDecoder.decode(parameter, "UTF-8").getBytes("UTF-8"), "UTF-8");
     }
 }
