@@ -1,14 +1,17 @@
 package ru.otus.spring.spring04.questionnaire.springshell.service;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Scanner;
 
-public class ConsoleService {
+@Service
+public class ConsoleService implements IOService {
 
     public void printMsg(String s) {
         System.out.println(s);
     }
 
-    String readMsg() {
+    public String readMsg() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }

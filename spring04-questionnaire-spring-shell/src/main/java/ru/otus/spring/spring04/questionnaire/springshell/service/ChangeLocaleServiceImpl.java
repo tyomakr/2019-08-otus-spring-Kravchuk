@@ -21,19 +21,19 @@ import java.util.Objects;
 public class ChangeLocaleServiceImpl implements ChangeLocaleService{
 
     private final MessageSource ms;
-    private ConsoleService cs = new ConsoleService();
+    private final IOService ioService;
 
     public void changeLocale() {
         List<String> localesList = scanMessagesFiles();
-        cs.printMsg(ms.getMessage("cpp.small.sep", null, LocaleContextHolder.getLocale()));
-        cs.printMsg(ms.getMessage("qs.select.lang", null, LocaleContextHolder.getLocale()));
+        ioService.printMsg(ms.getMessage("cpp.small.sep", null, LocaleContextHolder.getLocale()));
+        ioService.printMsg(ms.getMessage("qs.select.lang", null, LocaleContextHolder.getLocale()));
 
         for (int i = 1; i <= localesList.size(); i++) {
-            cs.printMsg(i + " " + localesList.get(i - 1));
+            ioService.printMsg(i + " " + localesList.get(i - 1));
         }
 
-        cs.printMsg(ms.getMessage("qs.select.enter.num", null, LocaleContextHolder.getLocale()));
-        int number = Integer.parseInt(cs.readMsg());
+        ioService.printMsg(ms.getMessage("qs.select.enter.num", null, LocaleContextHolder.getLocale()));
+        int number = Integer.parseInt(ioService.readMsg());
 
         if (number <= localesList.size() && number > 0) {
             String sl = localesList.get(number - 1);
@@ -57,7 +57,7 @@ public class ChangeLocaleServiceImpl implements ChangeLocaleService{
         try {
             Files.walk(Paths.get(decodeGetParameter(String.valueOf(i18nFolder)))).forEach(filepath -> addFilesToList(filepath.toFile(), localesList));
         } catch (IOException e) {
-            cs.printMsg(ms.getMessage("cls.scan.err", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("cls.scan.err", null, LocaleContextHolder.getLocale()));
         }
         return localesList;
     }

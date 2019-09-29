@@ -13,7 +13,7 @@ import java.util.Locale;
 public class UserServiceImpl implements UserService {
 
     private final MessageSource ms;
-    private ConsoleService cs = new ConsoleService();
+    private final IOService ioService;
     private User user;
 
     @Override
@@ -21,21 +21,21 @@ public class UserServiceImpl implements UserService {
         Locale lc = LocaleContextHolder.getLocale();
         user = new User();
 
-        cs.printMsg(ms.getMessage("qs.start.firstname", null, lc));
-        String firstName = cs.readMsg();
+        ioService.printMsg(ms.getMessage("qs.start.firstname", null, lc));
+        String firstName = ioService.readMsg();
         if (firstName.isEmpty()) {
             firstName = "Student";
         }
         user.setFirstName(firstName);
 
-        cs.printMsg(ms.getMessage("qs.start.lastname", null, lc));
-        String lastName = cs.readMsg();
+        ioService.printMsg(ms.getMessage("qs.start.lastname", null, lc));
+        String lastName = ioService.readMsg();
         if (lastName.isEmpty()) {
             lastName = "Anonymous";
         }
         user.setLastName(lastName);
 
-        cs.printMsg(ms.getMessage("qs.start.hello", new String[]{String.valueOf(user.getUserName())}, lc));
+        ioService.printMsg(ms.getMessage("qs.start.hello", new String[]{String.valueOf(user.getUserName())}, lc));
         return user;
     }
 

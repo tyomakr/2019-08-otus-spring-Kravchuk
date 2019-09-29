@@ -17,7 +17,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final UserService userService;
     private final QuestionDao questionDao;
 
-    private ConsoleService cs = new ConsoleService();
+    private final IOService ioService;
 
     @Override
     public void startQuestions() {
@@ -26,29 +26,29 @@ public class QuestionServiceImpl implements QuestionService {
         int totalQuestions = questionDao.getQuestionList().size();
 
         if (totalQuestions != 0) {
-            cs.printMsg(ms.getMessage("qs.start.ans.pls", new String[] {String.valueOf(totalQuestions)}, lc));
+            ioService.printMsg(ms.getMessage("qs.start.ans.pls", new String[] {String.valueOf(totalQuestions)}, lc));
 
             int correctAnswersCounter = 0;
 
             for (Question question : questionDao.getQuestionList()) {
-                cs.printMsg(ms.getMessage("qs.sep", null, lc));
-                cs.printMsg(question.getQuestion());
-                cs.printMsg(ms.getMessage("qs.start.answer", null, lc));
-                String answer = cs.readMsg().trim();
+                ioService.printMsg(ms.getMessage("qs.sep", null, lc));
+                ioService.printMsg(question.getQuestion());
+                ioService.printMsg(ms.getMessage("qs.start.answer", null, lc));
+                String answer = ioService.readMsg().trim();
                 if (answer.equalsIgnoreCase(question.getCorrectAnswer())) {
-                    cs.printMsg(ms.getMessage("qs.start.answer.ok", null, lc));
+                    ioService.printMsg(ms.getMessage("qs.start.answer.ok", null, lc));
                     correctAnswersCounter++;
                 } else {
-                    cs.printMsg(ms.getMessage("qs.start.answer.no", null, lc));
+                    ioService.printMsg(ms.getMessage("qs.start.answer.no", null, lc));
                 }
             }
-            cs.printMsg(ms.getMessage("cpp.small.sep", null, lc));
-            cs.printMsg(ms.getMessage("qs.finish", null, lc));
+            ioService.printMsg(ms.getMessage("cpp.small.sep", null, lc));
+            ioService.printMsg(ms.getMessage("qs.finish", null, lc));
             userService.setGrade(correctAnswersCounter);
         }
 
         if (totalQuestions == 0) {
-            cs.printMsg(ms.getMessage("qs.start.err.reading.file", null, lc));
+            ioService.printMsg(ms.getMessage("qs.start.err.reading.file", null, lc));
         }
     }
 }
