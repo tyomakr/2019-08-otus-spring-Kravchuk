@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
-import ru.otus.spring.library.springjdbc.dao.AuthorDao;
 import ru.otus.spring.library.springjdbc.dao.BookDao;
-import ru.otus.spring.library.springjdbc.dao.GenreDao;
 import ru.otus.spring.library.springjdbc.domain.Author;
 import ru.otus.spring.library.springjdbc.domain.Book;
 import ru.otus.spring.library.springjdbc.domain.Genre;
@@ -22,34 +20,42 @@ import java.util.Map;
 public class BookDaoJdbc implements BookDao {
 
     private final NamedParameterJdbcOperations jdbc;
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
-
 
     @Override
-    public Book getById(int id) {
-        Map<String, Object> params = Collections.singletonMap("id", id);
-            return jdbc.queryForObject("SELECT * FROM books WHERE id = :id", params, new BookMapper(authorDao, genreDao));
+    public Book getById(long id) {
+        Map<String, Long> params = Collections.singletonMap("id", id);
+        return jdbc.queryForObject
+                ("SELECT * FROM books as b " +
+                        "INNER JOIN authors as a on b.authorid = a.id " +
+                        "INNER JOIN genres as g on b.genreid = g.id " +
+                        "WHERE b.id = :id", params, new BookMapper());
     }
 
     @Override
-    public Book getByName(String bookName, int authorId) {
+    public Book getByName(String bookName, long authorId) {
         Map<String, Object> params = Collections.singletonMap("bookName", bookName);
-        return jdbc.queryForObject("SELECT * FROM books WHERE (bookName) = :bookName and (AUTHORID) = authorId", params, new BookMapper(authorDao, genreDao));
+        return jdbc.queryForObject
+                ("SELECT * FROM books as b " +
+                        "INNER JOIN authors as a on b.authorid = a.id " +
+                        "INNER JOIN genres as g on b.genreid = g.id " +
+                        "WHERE (bookName) = :bookName and (AUTHORID) = authorId", params, new BookMapper());
     }
 
 
     @Override
     public List<Book> getAll() {
-        return jdbc.getJdbcOperations().query("SELECT * FROM books ORDER BY BOOKNAME", new BookMapper(authorDao, genreDao));
+        return jdbc.getJdbcOperations().query
+                ("SELECT b.id, b.bookname, b.authorid, b.genreid, a.authorname, g.genrename " +
+                        "FROM books as b " +
+                        "INNER JOIN authors as a on b.authorid = a.id " +
+                        "INNER JOIN genres as g on b.genreid = g.id " +
+                        "ORDER BY BOOKNAME;",
+                        new BookMapper());
     }
-
 
     @Override
     public void insert(Book book) {
-        int authorId = authorDao.getByName(book.getAuthor().getAuthorName()).getId();
-        int genreId = genreDao.getByName(book.getGenre().getGenreName()).getId();
-        jdbc.getJdbcOperations().update("INSERT INTO BOOKS (BOOKNAME, AUTHORID, GENREID) VALUES ( ?, ?, ? )", book.getBookName(), authorId, genreId);
+        jdbc.getJdbcOperations().update("INSERT INTO BOOKS (BOOKNAME, AUTHORID, GENREID) VALUES ( ?, ?, ? )", book.getBookName(), book.getAuthor().getId(), book.getGenre().getId());
     }
 
 
@@ -59,19 +65,19 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void updateBookAuthor(Book book, int oldAuthorId, int newAuthorId) {
+    public void updateBookAuthor(Book book, long oldAuthorId, long newAuthorId) {
         jdbc.getJdbcOperations().update("UPDATE BOOKS set AUTHORID = ? WHERE BOOKNAME = ? AND AUTHORID = ?", newAuthorId, book.getBookName(), oldAuthorId);
     }
 
     @Override
-    public void updateBookGenre(int bookId, int newGenreId) {
+    public void updateBookGenre(long bookId, long newGenreId) {
         jdbc.getJdbcOperations().update("UPDATE BOOKS set GENREID = ? where ID = ?", newGenreId, bookId);
     }
 
 
     @Override
-    public void deleteById(int id) {
-        Map<String, Object> params = Collections.singletonMap("id", id);
+    public void deleteById(long id) {
+        Map<String, Long> params = Collections.singletonMap("id", id);
         jdbc.update("DELETE FROM books WHERE id = :id", params);
     }
 
@@ -79,17 +85,13 @@ public class BookDaoJdbc implements BookDao {
     @RequiredArgsConstructor
     private static class BookMapper implements RowMapper<Book> {
 
-        private final AuthorDao authorDao;
-        private final GenreDao genreDao;
 
         @Override
         public Book mapRow(ResultSet resultSet, int i) throws SQLException {
-            int id = resultSet.getInt("id");
+            long id = resultSet.getLong("id");
             String bookName = resultSet.getString("bookName");
-            int authorId = resultSet.getInt("authorId");
-            int genreId = resultSet.getInt("genreId");
-            Author author = authorDao.getById(authorId);
-            Genre genre = genreDao.getById(genreId);
+            Author author = new Author(resultSet.getLong("authorid"), resultSet.getString("authorname"));
+            Genre genre = new Genre(resultSet.getLong("genreid"), resultSet.getString("genrename"));
 
             return new Book(id, bookName, author, genre);
         }

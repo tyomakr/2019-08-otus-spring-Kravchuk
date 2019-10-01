@@ -9,7 +9,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.spring.library.springjdbc.service.AuthorService;
 import ru.otus.spring.library.springjdbc.service.BookService;
-import ru.otus.spring.library.springjdbc.service.ConsoleService;
+import ru.otus.spring.library.springjdbc.service.IOService;
 import ru.otus.spring.library.springjdbc.service.GenreService;
 
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ public class ShellCommands {
     private final AuthorService as;
     private final GenreService gs;
     private final MessageSource ms;
-    private final ConsoleService cs = new ConsoleService();
+    private final IOService ioService;
     private static final String UNDEF = "UNDEFINED";
 
     @ShellMethod(value = "Показать консоль H2", key = {"c", "console"})
@@ -48,7 +48,7 @@ public class ShellCommands {
         if (!bookName.equalsIgnoreCase(UNDEF) && !authorName.equalsIgnoreCase(UNDEF) && !genreName.equalsIgnoreCase(UNDEF)) {
             bs.insertBook(bookName, authorName, genreName);
         } else {
-            cs.printMsg(ms.getMessage("sh.err.syn.book", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("sh.err.syn.book", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -59,7 +59,7 @@ public class ShellCommands {
         if (!oldBookName.equalsIgnoreCase(UNDEF) && !authorName.equalsIgnoreCase(UNDEF) && !newBookName.equalsIgnoreCase(UNDEF)) {
             bs.updateBook(oldBookName, authorName, newBookName);
         } else {
-            cs.printMsg(ms.getMessage("sh.err.syn.bupd", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("sh.err.syn.bupd", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -70,7 +70,7 @@ public class ShellCommands {
         if (!bookName.equalsIgnoreCase(UNDEF) && !bookOldAuthor.equalsIgnoreCase(UNDEF) && !bookNewAuthor.equalsIgnoreCase(UNDEF)) {
             bs.updateBookAuthor(bookName, bookOldAuthor, bookNewAuthor);
         } else {
-            cs.printMsg(ms.getMessage("sh.err.syn.uba", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("sh.err.syn.uba", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -81,7 +81,7 @@ public class ShellCommands {
         if (!bookName.equalsIgnoreCase(UNDEF) && !bookAuthor.equalsIgnoreCase(UNDEF) && !bookNewGenre.equalsIgnoreCase(UNDEF)) {
             bs.updateBookGenre(bookName, bookAuthor, bookNewGenre);
         } else {
-            cs.printMsg(ms.getMessage("sh.err.syn.ubg", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("sh.err.syn.ubg", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -90,7 +90,7 @@ public class ShellCommands {
         if(!bookId.equalsIgnoreCase(UNDEF) ) {
             bs.deleteBook(bookId);
         } else {
-            cs.printMsg(ms.getMessage("sh.err.syn.bdel", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("sh.err.syn.bdel", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -107,7 +107,7 @@ public class ShellCommands {
             as.addAuthor(authorName);
         }
         else {
-            cs.printMsg(ms.getMessage("sh.err.syn.author", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("sh.err.syn.author", null, LocaleContextHolder.getLocale()));
         }
     }
     @ShellMethod(value = "Изменить имя автора", key = {"9", "edit-author", "ea"})
@@ -117,7 +117,7 @@ public class ShellCommands {
             as.updateAuthor(oldAuthorName, newAuthorName);
         }
         else {
-            cs.printMsg(ms.getMessage("sh.err.syn.auupd", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("sh.err.syn.auupd", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -134,7 +134,7 @@ public class ShellCommands {
             gs.addGenre(genreName);
         }
         else {
-            cs.printMsg(ms.getMessage("sh.err.syn.genre", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("sh.err.syn.genre", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -145,7 +145,7 @@ public class ShellCommands {
             gs.updateGenre(oldGenreName, newGenreName);
         }
         else {
-            cs.printMsg(ms.getMessage("sh.err.syn.auupd", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("sh.err.syn.auupd", null, LocaleContextHolder.getLocale()));
         }
     }
 }

@@ -12,8 +12,8 @@ import ru.otus.spring.library.springjdbc.domain.Book;
 import ru.otus.spring.library.springjdbc.domain.Genre;
 import ru.otus.spring.library.springjdbc.service.AuthorService;
 import ru.otus.spring.library.springjdbc.service.BookService;
-import ru.otus.spring.library.springjdbc.service.ConsoleService;
 import ru.otus.spring.library.springjdbc.service.GenreService;
+import ru.otus.spring.library.springjdbc.service.IOService;
 
 import java.util.List;
 
@@ -27,41 +27,43 @@ public class BookServiceImpl implements BookService {
     private final AuthorDao authorDao;
     private final GenreDao genreDao;
     private final MessageSource ms;
-    private final ConsoleService cs = new ConsoleService();
+    private final IOService ioService;
 
     @Override
     public void getAllBooks() {
         List<Book> bookList = bookDao.getAll();
-        cs.printMsg(ms.getMessage("bs.str.get.all", null, LocaleContextHolder.getLocale()));
+        ioService.printMsg(ms.getMessage("bs.str.get.all", null, LocaleContextHolder.getLocale()));
         for (Book book : bookList) {
-            cs.printItemsList("%-3s %-40s %-35s %-20s %n", book.getId(), book.getBookName(), book.getAuthor().getAuthorName(), book.getGenre().getGenreName());
+            ioService.printItemsList("%-3s %-40s %-35s %-20s %n", book.getId(), book.getBookName(), book.getAuthor().getAuthorName(), book.getGenre().getGenreName());
         }
     }
 
     @Override
     public void insertBook(String bookName, String authorName, String genreName) {
-        cs.printMsg(ms.getMessage("bs.str.add.att", null, LocaleContextHolder.getLocale()));
+        ioService.printMsg(ms.getMessage("bs.str.add.att", null, LocaleContextHolder.getLocale()));
         Author author = new Author(authorName);
         Genre genre = new Genre(genreName);
         Book book = new Book(bookName, author, genre);
 
-        cs.printMsg(ms.getMessage("bd.str.ins.check", null, LocaleContextHolder.getLocale()));
+        ioService.printMsg(ms.getMessage("bd.str.ins.check", null, LocaleContextHolder.getLocale()));
         if (!isBookExists(book)) {
-            cs.printMsg(ms.getMessage("bs.str.ins.new", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.str.ins.new", null, LocaleContextHolder.getLocale()));
 
             if (!authorService.isAuthorExists(book.getAuthor())) {
                 authorDao.insert(book.getAuthor());
             }
+            book.setAuthor(authorDao.getByName(book.getAuthor().getAuthorName()));
 
             if(!genreService.isGenreExists(book.getGenre())) {
                 genreDao.insert(book.getGenre());
             }
+            book.setGenre(genreDao.getByName(book.getGenre().getGenreName()));
 
             bookDao.insert(book);
-            cs.printMsg(ms.getMessage("bd.str.ins.done", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bd.str.ins.done", null, LocaleContextHolder.getLocale()));
 
         } else {
-            cs.printMsg(ms.getMessage("bs.str.ins.exist", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.str.ins.exist", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -71,24 +73,24 @@ public class BookServiceImpl implements BookService {
             Author author = authorDao.getByName(authorName);
             Book oldBook = bookDao.getByName(oldBookName,author.getId());
             bookDao.update(oldBook, newBookName);
-            cs.printMsg(ms.getMessage("bs.str.ins.edited", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.str.ins.edited", null, LocaleContextHolder.getLocale()));
         } catch (Exception e) {
-            cs.printMsg(ms.getMessage("bs.err.not.found", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.err.not.found", null, LocaleContextHolder.getLocale()));
         }
     }
 
     @Override
     public void deleteBook(String bookId) {
         try {
-            int id = Integer.parseInt(bookId);
+            long id = Integer.parseInt(bookId);
             Book book = bookDao.getById(id);
 
-            cs.printMsg(ms.getMessage("bs.str.attention.del", new String[]{book.getBookName() + " / " + book.getAuthor().getAuthorName()}, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.str.attention.del", new String[]{book.getBookName() + " / " + book.getAuthor().getAuthorName()}, LocaleContextHolder.getLocale()));
             bookDao.deleteById(id);
-            cs.printMsg(ms.getMessage("bs.str.del", new String[]{book.getBookName() + " / " + book.getAuthor().getAuthorName()}, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.str.del", new String[]{book.getBookName() + " / " + book.getAuthor().getAuthorName()}, LocaleContextHolder.getLocale()));
 
         } catch (Exception e) {
-            cs.printMsg(ms.getMessage("bs.err.input", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.err.input", null, LocaleContextHolder.getLocale()));
         }
 
     }
@@ -109,7 +111,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void updateBookAuthor(String bookName, String bookOldAuthor, String bookNewAuthor) {
 
-        cs.printMsg(ms.getMessage("bs.msg.uba.att", null, LocaleContextHolder.getLocale()));
+        ioService.printMsg(ms.getMessage("bs.msg.uba.att", null, LocaleContextHolder.getLocale()));
 
         try {
             Author oldAuthor = authorDao.getByName(bookOldAuthor);
@@ -121,17 +123,17 @@ public class BookServiceImpl implements BookService {
 
             Book book = bookDao.getByName(bookName, oldAuthor.getId());
             bookDao.updateBookAuthor(book, oldAuthor.getId(), newAuthor.getId());
-            cs.printMsg(ms.getMessage("bs.msg.uba.done", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.msg.uba.done", null, LocaleContextHolder.getLocale()));
 
         } catch (Exception e) {
-            cs.printMsg(ms.getMessage("bs.err.uba", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.err.uba", null, LocaleContextHolder.getLocale()));
         }
 
     }
 
     @Override
     public void updateBookGenre(String bookName, String bookAuthor, String bookNewGenre) {
-        cs.printMsg(ms.getMessage("bs.msg.ubg.att", null, LocaleContextHolder.getLocale()));
+        ioService.printMsg(ms.getMessage("bs.msg.ubg.att", null, LocaleContextHolder.getLocale()));
 
         try {
             Genre newGenre = new Genre(bookNewGenre);
@@ -143,10 +145,10 @@ public class BookServiceImpl implements BookService {
 
             Book book = bookDao.getByName(bookName, author.getId());
             bookDao.updateBookGenre(book.getId(), newGenre.getId());
-            cs.printMsg(ms.getMessage("bs.msg.ubg.done", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.msg.ubg.done", null, LocaleContextHolder.getLocale()));
 
         } catch (Exception e) {
-            cs.printMsg(ms.getMessage("bs.err.uba", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("bs.err.uba", null, LocaleContextHolder.getLocale()));
         }
     }
 }

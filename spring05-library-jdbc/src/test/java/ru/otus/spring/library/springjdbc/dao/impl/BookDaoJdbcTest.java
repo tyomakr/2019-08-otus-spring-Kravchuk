@@ -71,7 +71,7 @@ class BookDaoJdbcTest {
     void update() {
         Book book = getTestBook();
 
-        int authorId = authorDao.getByName(book.getAuthor().getAuthorName()).getId();
+        long authorId = authorDao.getByName(book.getAuthor().getAuthorName()).getId();
         book = bookDao.getByName(book.getBookName(), authorId);
 
         String newBookName = "TEST BOOK RENAMED";
@@ -86,12 +86,12 @@ class BookDaoJdbcTest {
     void updateBookAuthor() {
         Book book = getTestBook();
 
-        int authorID = authorDao.getByName(TA).getId();
+        long authorID = authorDao.getByName(TA).getId();
         book = bookDao.getByName(TB, authorID);
 
         Author newAuthor = new Author("NEW AUTHOR");
         authorDao.insert(newAuthor);
-        int newAuthorID = authorDao.getByName(newAuthor.getAuthorName()).getId();
+        long newAuthorID = authorDao.getByName(newAuthor.getAuthorName()).getId();
 
         bookDao.updateBookAuthor(book, authorID, newAuthorID);
         Book editedBook = bookDao.getByName(book.getBookName(), newAuthorID);
@@ -110,8 +110,8 @@ class BookDaoJdbcTest {
         Genre newGenre = new Genre("NEW GENRE");
         genreDao.insert(newGenre);
 
-        int bookId = book.getId();
-        int newGenreId = genreDao.getByName(newGenre.getGenreName()).getId();
+        long bookId = book.getId();
+        long newGenreId = genreDao.getByName(newGenre.getGenreName()).getId();
 
         bookDao.updateBookGenre(bookId, newGenreId);
         Book newBook = bookDao.getById(bookId);

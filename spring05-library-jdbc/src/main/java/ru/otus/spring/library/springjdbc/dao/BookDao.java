@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface BookDao {
 
-    Book getById(int id);
+    Book getById(long id);
 
-    Book getByName(String bookName, int authorId);
+    Book getByName(String bookName, long authorId);
 
     List<Book> getAll();
 
@@ -16,9 +16,9 @@ public interface BookDao {
 
     void update(Book book, String newBookName);
 
-    void updateBookAuthor(Book book, int oldAuthorId, int newAuthorId);
+    void updateBookAuthor(Book book, long oldAuthorId, long newAuthorId);
 
-    void updateBookGenre(int bookId, int newGenreId);
+    void updateBookGenre(long bookId, long newGenreId);
 
-    void deleteById(int id);
+    void deleteById(long id);
 }

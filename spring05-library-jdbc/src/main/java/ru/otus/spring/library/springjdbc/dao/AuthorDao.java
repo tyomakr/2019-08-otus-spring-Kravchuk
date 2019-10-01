@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AuthorDao {
 
-    Author getById(int id);
+    Author getById(long id);
 
     Author getByName(String authorName);
 

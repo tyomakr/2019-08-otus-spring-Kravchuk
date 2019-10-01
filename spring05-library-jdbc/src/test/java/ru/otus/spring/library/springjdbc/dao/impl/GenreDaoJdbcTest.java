@@ -58,7 +58,7 @@ class GenreDaoJdbcTest {
         Genre testGenre = new Genre(GENRE_TEST_NAME);
         genreDao.insert(testGenre);
         testGenre = genreDao.getByName(GENRE_TEST_NAME);
-        int expId = testGenre.getId();
+        long expId = testGenre.getId();
         genreDao.update(testGenre, GENRE_TEST_NAME_REN);
 
         Genre newTestGenre = genreDao.getById(expId);

@@ -11,9 +11,9 @@
     </parent>
 
     <groupId>ru.otus.spring</groupId>
-    <artifactId>spring05-library-spring-jdbc</artifactId>
+    <artifactId>spring05-library-jdbc</artifactId>
     <version>0.0.1</version>
-    <name>spring05-library-spring-jdbc</name>
+    <name>spring05-library-jdbc</name>
     <description>Library for Spring Boot JDBC</description>
 
     <properties>

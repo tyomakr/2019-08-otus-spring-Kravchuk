@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GenreDao {
 
-    Genre getById(int id);
+    Genre getById(long id);
 
     Genre getByName(String genreName);
 

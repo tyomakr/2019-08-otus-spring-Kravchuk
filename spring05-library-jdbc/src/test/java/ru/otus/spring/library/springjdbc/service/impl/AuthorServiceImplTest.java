@@ -1,32 +1,47 @@
 package ru.otus.spring.library.springjdbc.service.impl;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.spring.library.springjdbc.dao.impl.AuthorDaoJdbc;
 import ru.otus.spring.library.springjdbc.domain.Author;
-
-import static org.junit.jupiter.api.Assertions.*;
+import ru.otus.spring.library.springjdbc.service.IOService;
 
 @ExtendWith(SpringExtension.class)
 @JdbcTest
-@Import({AuthorDaoJdbc.class, AuthorServiceImpl.class})
 @DisplayName("Сервис для работы с авторами")
 class AuthorServiceImplTest {
 
-    @Autowired
+
+    @SpyBean
+    private AuthorDaoJdbc authorDao;
+    @SpyBean
     private AuthorServiceImpl authorService;
 
-    @Autowired
-    private AuthorDaoJdbc authorDao;
+    @MockBean
+    private IOService ioService;
+
+
 
     @Test
     void isAuthorExists() {
-        Author author = authorDao.getById(1);
-        assertTrue(authorService.isAuthorExists(author));
+        Author testAuthor = authorDao.getById(1);
+        Assert.assertTrue(authorService.isAuthorExists(testAuthor));
     }
 }

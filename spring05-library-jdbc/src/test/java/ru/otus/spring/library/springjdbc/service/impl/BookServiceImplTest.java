@@ -6,24 +6,41 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.otus.spring.library.springjdbc.dao.AuthorDao;
+import ru.otus.spring.library.springjdbc.dao.GenreDao;
 import ru.otus.spring.library.springjdbc.dao.impl.AuthorDaoJdbc;
 import ru.otus.spring.library.springjdbc.dao.impl.BookDaoJdbc;
 import ru.otus.spring.library.springjdbc.dao.impl.GenreDaoJdbc;
 import ru.otus.spring.library.springjdbc.domain.Book;
+import ru.otus.spring.library.springjdbc.service.AuthorService;
+import ru.otus.spring.library.springjdbc.service.IOService;
 
 @ExtendWith(SpringExtension.class)
 @JdbcTest
-@Import({BookDaoJdbc.class, AuthorDaoJdbc.class, GenreDaoJdbc.class, BookServiceImpl.class, AuthorServiceImpl.class, GenreServiceImpl.class})
 @DisplayName("Сервис для работы с книгами")
 class BookServiceImplTest {
 
 
-    @Autowired
+    @SpyBean
     private BookServiceImpl booksService;
-    @Autowired
+    @SpyBean
     private BookDaoJdbc bookDao;
+
+    @MockBean
+    private AuthorServiceImpl authorService;
+    @MockBean
+    private AuthorDaoJdbc authorDao;
+    @MockBean
+    private GenreServiceImpl genreService;
+    @MockBean
+    private GenreDaoJdbc genreDao;
+    @MockBean
+    private IOService ioService;
+
 
     @Test
     void isBookExists() {

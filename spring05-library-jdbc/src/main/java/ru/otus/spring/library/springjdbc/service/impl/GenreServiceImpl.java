@@ -6,8 +6,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.library.springjdbc.dao.GenreDao;
 import ru.otus.spring.library.springjdbc.domain.Genre;
-import ru.otus.spring.library.springjdbc.service.ConsoleService;
 import ru.otus.spring.library.springjdbc.service.GenreService;
+import ru.otus.spring.library.springjdbc.service.IOService;
 
 import java.util.List;
 
@@ -17,15 +17,15 @@ public class GenreServiceImpl implements GenreService {
 
     private final GenreDao genreDao;
     private final MessageSource ms;
-    private final ConsoleService cs = new ConsoleService();
+    private final IOService ioService;
 
 
     @Override
     public void getAllGenres() {
-        cs.printMsg(ms.getMessage("gs.str.get.all", null, LocaleContextHolder.getLocale()));
+        ioService.printMsg(ms.getMessage("gs.str.get.all", null, LocaleContextHolder.getLocale()));
         List<Genre> genreList = genreDao.getAll();
         for (Genre genre : genreList) {
-            cs.printMsg(genre.getId() + ". " +genre.getGenreName());
+            ioService.printMsg(genre.getId() + ". " +genre.getGenreName());
         }
     }
 
@@ -34,9 +34,9 @@ public class GenreServiceImpl implements GenreService {
         Genre genre = new Genre(genreName);
         if (!isGenreExists(genre)) {
             genreDao.insert(genre);
-            cs.printMsg(ms.getMessage("gs.str.added", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("gs.str.added", null, LocaleContextHolder.getLocale()));
         } else {
-            cs.printMsg(ms.getMessage("gs.err.exists", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("gs.err.exists", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -46,9 +46,9 @@ public class GenreServiceImpl implements GenreService {
         if (isGenreExists(oldGenre)) {
             oldGenre = genreDao.getByName(oldGenreName);
             genreDao.update(oldGenre, newGenreName);
-            cs.printMsg(ms.getMessage("gs.str.edited", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("gs.str.edited", null, LocaleContextHolder.getLocale()));
         } else {
-            cs.printMsg(ms.getMessage("gs.err.not.found", null, LocaleContextHolder.getLocale()));
+            ioService.printMsg(ms.getMessage("gs.err.not.found", null, LocaleContextHolder.getLocale()));
         }
     }
 
