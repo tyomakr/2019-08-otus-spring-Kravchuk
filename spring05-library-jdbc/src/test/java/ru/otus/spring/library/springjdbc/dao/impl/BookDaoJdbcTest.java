@@ -134,13 +134,13 @@ class BookDaoJdbcTest {
 
     @Test
     @DisplayName(" при проверке наличия книги должен возвращать true если книга действительно присутствует в БД")
-    void isAuthorNameExistsShouldReturnTrueWhenCheckReallyExistingAuthor() {
+    void isBookNameWithAuthorNameExistsShouldReturnTrueWhenCheckReallyExistingBook() {
         Assert.assertTrue(bookDao.isBookNameWithAuthorNameExists(EXAMPLE_BOOK_20));
     }
 
     @Test
     @DisplayName(" при проверке наличия книги должен возвращать false если книги нет в БД")
-    void isAuthorNameExistsShouldReturnFalseWhenCheckNotExistingAuthor() {
+    void isBookNameWithAuthorNameExistsShouldReturnFalseWhenCheckNotExistingBook() {
         Book notExistingAuthor = new Book(1000, "NotExistingBook", new Author(TA), new Genre(TG));
         Assert.assertFalse(bookDao.isBookNameWithAuthorNameExists(notExistingAuthor));
     }
