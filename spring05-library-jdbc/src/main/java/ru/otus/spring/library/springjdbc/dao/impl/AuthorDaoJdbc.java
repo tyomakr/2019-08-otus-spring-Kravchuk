@@ -2,6 +2,7 @@ package ru.otus.spring.library.springjdbc.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.library.springjdbc.dao.AuthorDao;
@@ -45,6 +46,12 @@ public class AuthorDaoJdbc implements AuthorDao {
     @Override
     public void update(Author oldAuthor, String newAuthorName) {
         jdbc.getJdbcOperations().update("UPDATE AUTHORS set AUTHORNAME = ? where ID = ?", newAuthorName, oldAuthor.getId());
+    }
+
+    @Override
+    public boolean isAuthorNameExists(Author author) {
+        List<Object> results = jdbc.getJdbcOperations().query("SELECT 1 FROM authors WHERE authorname = ? ", new SingleColumnRowMapper<>(), author.getAuthorName());
+        return !results.isEmpty();
     }
 
 

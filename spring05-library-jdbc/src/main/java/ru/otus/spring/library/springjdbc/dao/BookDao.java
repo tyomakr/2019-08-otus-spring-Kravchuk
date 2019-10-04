@@ -21,4 +21,6 @@ public interface BookDao {
     void updateBookGenre(long bookId, long newGenreId);
 
     void deleteById(long id);
+
+    boolean isBookNameWithAuthorNameExists(Book book);
 }

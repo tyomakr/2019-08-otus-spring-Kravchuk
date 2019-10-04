@@ -16,4 +16,5 @@ public interface GenreDao {
 
     void update(Genre oldGenre, String newGenreName);
 
+    boolean isGenreNameExists(Genre genre);
 }

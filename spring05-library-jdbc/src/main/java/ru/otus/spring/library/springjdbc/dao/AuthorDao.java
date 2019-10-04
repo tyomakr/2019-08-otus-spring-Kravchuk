@@ -16,4 +16,5 @@ public interface AuthorDao {
 
     void update(Author oldAuthor, String newAuthorName);
 
+    boolean isAuthorNameExists(Author author);
 }

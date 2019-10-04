@@ -12,7 +12,7 @@ public interface BookService {
 
     void deleteBook(String bookId);
 
-    boolean isBookExists(Book book);
+    boolean isBookNameWithAuthorNameExists(Book book);
 
     void updateBookAuthor(String bookName, String bookOldAuthor, String bookNewAuthor);
 

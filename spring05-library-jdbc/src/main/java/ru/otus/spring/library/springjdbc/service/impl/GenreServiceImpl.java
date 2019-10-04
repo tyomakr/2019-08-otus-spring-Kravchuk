@@ -32,7 +32,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void addGenre(String genreName) {
         Genre genre = new Genre(genreName);
-        if (!isGenreExists(genre)) {
+        if (!isGenreNameExists(genre)) {
             genreDao.insert(genre);
             ioService.printMsg(ms.getMessage("gs.str.added", null, LocaleContextHolder.getLocale()));
         } else {
@@ -43,7 +43,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void updateGenre(String oldGenreName, String newGenreName) {
         Genre oldGenre = new Genre(oldGenreName);
-        if (isGenreExists(oldGenre)) {
+        if (isGenreNameExists(oldGenre)) {
             oldGenre = genreDao.getByName(oldGenreName);
             genreDao.update(oldGenre, newGenreName);
             ioService.printMsg(ms.getMessage("gs.str.edited", null, LocaleContextHolder.getLocale()));
@@ -53,13 +53,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public boolean isGenreExists(Genre genre) {
-        List<Genre> genreList = genreDao.getAll();
-        for (Genre value : genreList) {
-            if (value.getGenreName().equalsIgnoreCase(genre.getGenreName())) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isGenreNameExists(Genre genre) {
+        return genreDao.isGenreNameExists(genre);
     }
 }

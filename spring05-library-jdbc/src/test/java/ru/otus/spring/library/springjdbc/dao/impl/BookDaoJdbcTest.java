@@ -16,7 +16,6 @@ import ru.otus.spring.library.springjdbc.domain.Genre;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(SpringExtension.class)
 @JdbcTest
 @Import({BookDaoJdbc.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
 @DisplayName("DAO для работы с книгами")
@@ -81,6 +80,7 @@ class BookDaoJdbcTest {
         assertNotSame(newBook.getBookName(), book.getBookName());
     }
 
+
     @Test
     @DisplayName("updateBookAuthor обновляет имя автора в книге")
     void updateBookAuthor() {
@@ -98,8 +98,6 @@ class BookDaoJdbcTest {
 
         assertSame(book.getId(), editedBook.getId());
         assertNotSame(book.getAuthor().getId(), editedBook.getAuthor().getId());
-
-
     }
 
     @Test
@@ -131,8 +129,22 @@ class BookDaoJdbcTest {
             Assert.fail();
         } catch (EmptyResultDataAccessException e) {
         }
-
     }
+
+
+    @Test
+    @DisplayName(" при проверке наличия книги должен возвращать true если книга действительно присутствует в БД")
+    void isAuthorNameExistsShouldReturnTrueWhenCheckReallyExistingAuthor() {
+        Assert.assertTrue(bookDao.isBookNameWithAuthorNameExists(EXAMPLE_BOOK_20));
+    }
+
+    @Test
+    @DisplayName(" при проверке наличия книги должен возвращать false если книги нет в БД")
+    void isAuthorNameExistsShouldReturnFalseWhenCheckNotExistingAuthor() {
+        Book notExistingAuthor = new Book(1000, "NotExistingBook", new Author(TA), new Genre(TG));
+        Assert.assertFalse(bookDao.isBookNameWithAuthorNameExists(notExistingAuthor));
+    }
+
 
     private Book getTestBook() {
         Author testAuthor = new Author(TA);
@@ -146,4 +158,6 @@ class BookDaoJdbcTest {
 
         return book;
     }
+
+
 }

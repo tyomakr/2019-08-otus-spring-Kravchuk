@@ -2,6 +2,7 @@ package ru.otus.spring.library.springjdbc.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.library.springjdbc.dao.GenreDao;
@@ -49,6 +50,12 @@ public class GenreDaoJdbc implements GenreDao {
     @Override
     public void update(Genre oldGenre, String newGenreName) {
         jdbc.getJdbcOperations().update("UPDATE GENRES set GENRENAME = ? where ID = ?", newGenreName, oldGenre.getId());
+    }
+
+    @Override
+    public boolean isGenreNameExists(Genre genre) {
+        List<Object> results = jdbc.getJdbcOperations().query("SELECT 1 FROM genres WHERE genrename = ?", new SingleColumnRowMapper<>(), genre.getGenreName());
+        return !results.isEmpty();
     }
 
 

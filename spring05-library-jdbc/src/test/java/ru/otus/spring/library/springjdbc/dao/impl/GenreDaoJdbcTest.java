@@ -12,7 +12,7 @@ import ru.otus.spring.library.springjdbc.domain.Genre;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
+
 @JdbcTest
 @Import(GenreDaoJdbc.class)
 @DisplayName("DAO для работы с жанром")
@@ -22,6 +22,7 @@ class GenreDaoJdbcTest {
     private final static String GENRE_ID_2_NAME = "Детектив";
     private final static String GENRE_TEST_NAME = "Test Genre";
     private final static String GENRE_TEST_NAME_REN = "Test Genre renamed";
+    private final static Genre TEST_GENRE = new Genre(2, GENRE_ID_2_NAME);
 
     @Autowired
     private GenreDaoJdbc genreDao;
@@ -64,5 +65,18 @@ class GenreDaoJdbcTest {
         Genre newTestGenre = genreDao.getById(expId);
         assertSame(testGenre.getId(), newTestGenre.getId());
         assertNotSame(testGenre.getGenreName(), newTestGenre.getGenreName());
+    }
+
+    @Test
+    @DisplayName(" при проверке наличия жанра должен возвращать true если жанр действительно присутствует в БД")
+    void isGenreNameExistsShouldReturnTrueWhenCheckReallyExistingGenre() {
+        Assert.assertTrue(genreDao.isGenreNameExists(TEST_GENRE));
+    }
+
+    @Test
+    @DisplayName(" при проверке наличия жанра должен возвращать false если жанра нет в БД")
+    void isGenreNameExistsShouldReturnFalseWhenCheckNotExistingGenre() {
+        Genre notExistingGenre = new Genre(100, GENRE_TEST_NAME);
+        Assert.assertFalse(genreDao.isGenreNameExists(notExistingGenre));
     }
 }

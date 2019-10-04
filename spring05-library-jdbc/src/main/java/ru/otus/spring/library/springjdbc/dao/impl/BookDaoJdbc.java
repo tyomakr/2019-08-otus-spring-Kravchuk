@@ -2,6 +2,7 @@ package ru.otus.spring.library.springjdbc.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.library.springjdbc.dao.BookDao;
@@ -79,6 +80,15 @@ public class BookDaoJdbc implements BookDao {
     public void deleteById(long id) {
         Map<String, Long> params = Collections.singletonMap("id", id);
         jdbc.update("DELETE FROM books WHERE id = :id", params);
+    }
+
+    @Override
+    public boolean isBookNameWithAuthorNameExists(Book book) {
+        List<Object> results = jdbc.getJdbcOperations().query(
+                "SELECT 1 FROM Books b " +
+                        "INNER JOIN Authors a " +
+                        "WHERE b.bookname = ? AND a.authorname = ?", new SingleColumnRowMapper<>(), book.getBookName(), book.getAuthor().getAuthorName());
+        return !results.isEmpty();
     }
 
 

@@ -10,5 +10,5 @@ public interface AuthorService {
 
     void updateAuthor(String oldAuthorName, String newAuthorName);
 
-    boolean isAuthorExists(Author author);
+    boolean isAuthorNameExists(Author author);
 }

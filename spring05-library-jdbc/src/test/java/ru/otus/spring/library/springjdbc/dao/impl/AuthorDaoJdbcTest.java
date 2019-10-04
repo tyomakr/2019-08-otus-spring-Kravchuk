@@ -14,13 +14,13 @@ import ru.otus.spring.library.springjdbc.domain.Author;
 import java.util.*;
 
 
-@ExtendWith(SpringExtension.class)
 @JdbcTest
 @Import(AuthorDaoJdbc.class)
 @DisplayName("DAO для работы с автором")
 class AuthorDaoJdbcTest {
 
     final private static long TEST_AUTHOR_ID_2 = 2;
+    final private static Author TEST_AUTHOR = new Author(1, "Джон Рональд Руэл Толкин");
     final private static String TEST_AUTHOR_NAME = "Test Author";
     final private static String TEST_AUTHOR_NAME_2 = "Роджер Желязны";
     final private static String TEST_AUTHOR_NAME_REN = "Test Author Renamed";
@@ -85,5 +85,18 @@ class AuthorDaoJdbcTest {
         Author a11 = new Author(11, "Данте Алигьери");
 
         return new Author[]{a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11};
+    }
+
+    @Test
+    @DisplayName(" при проверке наличия автора должен возвращать true если автор действительно присутствует в БД")
+    void isAuthorNameExistsShouldReturnTrueWhenCheckReallyExistingAuthor() {
+        Assert.assertTrue(authorDao.isAuthorNameExists(TEST_AUTHOR));
+    }
+
+    @Test
+    @DisplayName(" при проверке наличия автора должен возвращать false если автора нет в БД")
+    void isAuthorNameExistsShouldReturnFalseWhenCheckNotExistingAuthor() {
+        Author notExistingAuthor = new Author(100, "Test Author");
+        Assert.assertFalse(authorDao.isAuthorNameExists(notExistingAuthor));
     }
 }

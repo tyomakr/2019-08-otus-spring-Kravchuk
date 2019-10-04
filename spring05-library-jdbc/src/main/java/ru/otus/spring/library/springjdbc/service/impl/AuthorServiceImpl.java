@@ -30,7 +30,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void addAuthor(String authorName) {
         Author author = new Author(authorName);
-        if (!isAuthorExists(author)) {
+        if (!isAuthorNameExists(author)) {
             authorDao.insert(author);
             ioService.printMsg(ms.getMessage("as.str.add", null, LocaleContextHolder.getLocale()));
         } else {
@@ -41,7 +41,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void updateAuthor(String oldAuthorName, String newAuthorName) {
         Author oldAuthor = new Author(oldAuthorName);
-        if (isAuthorExists(oldAuthor)) {
+        if (isAuthorNameExists(oldAuthor)) {
             oldAuthor = authorDao.getByName(oldAuthorName);
             authorDao.update(oldAuthor, newAuthorName);
             ioService.printMsg(ms.getMessage("as.str.upd", null, LocaleContextHolder.getLocale()));
@@ -51,15 +51,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public boolean isAuthorExists(Author author) {
-        List<Author> authorList = authorDao.getAll();
-        for (Author value : authorList) {
-            if (value.getAuthorName().equalsIgnoreCase(author.getAuthorName())) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isAuthorNameExists(Author author) {
+        return authorDao.isAuthorNameExists(author);
     }
-
-
 }

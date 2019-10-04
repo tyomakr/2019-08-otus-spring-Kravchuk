@@ -46,15 +46,15 @@ public class BookServiceImpl implements BookService {
         Book book = new Book(bookName, author, genre);
 
         ioService.printMsg(ms.getMessage("bd.str.ins.check", null, LocaleContextHolder.getLocale()));
-        if (!isBookExists(book)) {
+        if (!isBookNameWithAuthorNameExists(book)) {
             ioService.printMsg(ms.getMessage("bs.str.ins.new", null, LocaleContextHolder.getLocale()));
 
-            if (!authorService.isAuthorExists(book.getAuthor())) {
+            if (!authorService.isAuthorNameExists(book.getAuthor())) {
                 authorDao.insert(book.getAuthor());
             }
             book.setAuthor(authorDao.getByName(book.getAuthor().getAuthorName()));
 
-            if(!genreService.isGenreExists(book.getGenre())) {
+            if(!genreService.isGenreNameExists(book.getGenre())) {
                 genreDao.insert(book.getGenre());
             }
             book.setGenre(genreDao.getByName(book.getGenre().getGenreName()));
@@ -96,16 +96,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean isBookExists(Book book) {
-        List<Book> bookList = bookDao.getAll();
-        for (Book value : bookList) {
-            if (value.getBookName().equalsIgnoreCase(book.getBookName())) {
-                if(value.getAuthor().getAuthorName().equalsIgnoreCase(book.getAuthor().getAuthorName()) ) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public boolean isBookNameWithAuthorNameExists(Book book) {
+        return bookDao.isBookNameWithAuthorNameExists(book);
     }
 
     @Override
@@ -116,7 +108,7 @@ public class BookServiceImpl implements BookService {
         try {
             Author oldAuthor = authorDao.getByName(bookOldAuthor);
             Author newAuthor = new Author(bookNewAuthor);
-            if (!authorService.isAuthorExists(newAuthor)) {
+            if (!authorService.isAuthorNameExists(newAuthor)) {
                 authorDao.insert(newAuthor);
             }
             newAuthor = authorDao.getByName(bookNewAuthor);
@@ -138,7 +130,7 @@ public class BookServiceImpl implements BookService {
         try {
             Genre newGenre = new Genre(bookNewGenre);
             Author author = authorDao.getByName(bookAuthor);
-            if(!genreService.isGenreExists(newGenre)) {
+            if(!genreService.isGenreNameExists(newGenre)) {
                 genreDao.insert(newGenre);
             }
             newGenre = genreDao.getByName(bookNewGenre);

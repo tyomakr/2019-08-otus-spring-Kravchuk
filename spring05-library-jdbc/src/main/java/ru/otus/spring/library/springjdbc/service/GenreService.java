@@ -10,6 +10,6 @@ public interface GenreService {
 
     void updateGenre(String oldGenreName, String newGenreName);
 
-    boolean isGenreExists(Genre genre);
+    boolean isGenreNameExists(Genre genre);
 
 }
