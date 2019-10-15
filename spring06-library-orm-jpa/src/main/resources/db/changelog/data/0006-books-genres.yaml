@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0006-books-genres-data
+      author: tyomakr
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: bgid
+        file: data/booksgenres.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: booksgenres

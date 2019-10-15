@@ -1,0 +1,106 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0004-books
+      author: tyomakr
+      createTable:
+        tableName: books
+        columns:
+          - column:
+              name: bookid
+              type: BIGINT
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_books
+          - column:
+              name: bookname
+              type: varchar(300)
+
+  - changeSet:
+      id: 0005-books-authors-table
+      author: tyomakr
+      createTable:
+        tableName: booksauthors
+        columns:
+          - column:
+              name: baid
+              type: BIGINT
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_booksauthors
+          - column:
+              name: bookid
+              type: BIGINT
+              constraints:
+                nullable: false
+                foreignKeyName: fk_book_a
+                references: books(bookid)
+          - column:
+              name: authorid
+              type: BIGINT
+              constraints:
+                nullable: false
+                foreignKeyName: fk_author
+                references: authors(authorid)
+
+  - changeSet:
+      id: 0006-books-genres-table
+      author: tyomakr
+      createTable:
+        tableName: booksgenres
+        columns:
+          - column:
+              name: bgid
+              type: BIGINT
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_book_genres
+          - column:
+              name: bookid
+              type: BIGINT
+              constraints:
+                nullable: false
+                foreignKeyName: fk_book_g
+                references: books(bookid)
+          - column:
+              name: genreid
+              type: BIGINT
+              constraints:
+                nullable: false
+                foreignKeyName: fk_genre
+                references: genres(genreid)
+
+  - changeSet:
+      id: 0007-books-comments-table
+      author: tyomakr
+      createTable:
+        tableName: bookscomments
+        columns:
+          - column:
+              name: bcid
+              type: BIGINT
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_books_comments
+          - column:
+              name: bookid
+              type: BIGINT
+              constraints:
+                nullable: false
+                foreignKeyName: fk_book_c
+                references: books(bookid)
+          - column:
+              name: commentid
+              type: BIGINT
+              autoIncrement: true
+              constraints:
+                nullable: false
+                foreignKeyName: fk_comment
+                references: comments(commentid)
+

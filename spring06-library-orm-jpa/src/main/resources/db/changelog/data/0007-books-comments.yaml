@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0007-books-genres-data
+      author: tyomakr
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: bcid
+        file: data/bookscomments.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: bookscomments

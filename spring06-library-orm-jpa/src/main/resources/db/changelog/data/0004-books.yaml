@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0004-books-data
+      author: tyomakr
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: bookid
+        file: data/books.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: books

@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0003-comments
+      author: tyomakr
+      createTable:
+        tableName: comments
+        columns:
+          - column:
+              name: commentid
+              type: BIGINT
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_comment
+
+          - column:
+              name: commenttext
+              type: varchar(1000)
