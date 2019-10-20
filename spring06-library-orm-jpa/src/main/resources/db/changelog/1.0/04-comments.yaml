@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 0003-comments
+      id: 0006-comments
       author: tyomakr
       createTable:
         tableName: comments
@@ -13,7 +13,16 @@ databaseChangeLog:
                 nullable: false
                 primaryKey: true
                 primaryKeyName: pk_comment
-
+          - column:
+              name: bookid
+              type: BIGINT
+              constraints:
+                nullable: false
+                foreignKeyName: fk_comments
+                references: books(bookid)
+                deleteCascade: true
           - column:
               name: commenttext
               type: varchar(1000)
+              constraints:
+                nullable: false

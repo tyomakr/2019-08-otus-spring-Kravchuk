@@ -1,13 +1,13 @@
 databaseChangeLog:
   - changeSet:
-      id: 0004-books-data
+      id: 0005-books-genres-data
       author: tyomakr
       runOnChange: true
       loadUpdateData:
-        primaryKey: bookid
-        file: data/books.csv
+        primaryKey: bgid
+        file: data/booksgenres.csv
         relativeToChangelogFile: true
         separator: ;
         quotChar: '"'
         encoding: UTF-8
-        tableName: books
+        tableName: booksgenres

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 0004-books
+      id: 0003-books
       author: tyomakr
       createTable:
         tableName: books
@@ -18,7 +18,7 @@ databaseChangeLog:
               type: varchar(300)
 
   - changeSet:
-      id: 0005-books-authors-table
+      id: 0004-books-authors-table
       author: tyomakr
       createTable:
         tableName: booksauthors
@@ -47,7 +47,7 @@ databaseChangeLog:
                 references: authors(authorid)
 
   - changeSet:
-      id: 0006-books-genres-table
+      id: 0005-books-genres-table
       author: tyomakr
       createTable:
         tableName: booksgenres
@@ -74,36 +74,3 @@ databaseChangeLog:
                 nullable: false
                 foreignKeyName: fk_genre
                 references: genres(genreid)
-
-  - changeSet:
-      id: 0007-books-comments-table
-      author: tyomakr
-      createTable:
-        tableName: bookscomments
-        columns:
-          - column:
-              name: bcid
-              type: BIGINT
-              autoIncrement: true
-              constraints:
-                nullable: false
-                primaryKey: true
-                primaryKeyName: pk_books_comments
-          - column:
-              name: bookid
-              type: BIGINT
-              constraints:
-                nullable: false
-                foreignKeyName: fk_book_c
-                references: books(bookid)
-                deleteCascade: true
-          - column:
-              name: commentid
-              type: BIGINT
-              autoIncrement: true
-              constraints:
-                nullable: false
-                foreignKeyName: fk_comment
-                references: comments(commentid)
-                deleteCascade: true
-
