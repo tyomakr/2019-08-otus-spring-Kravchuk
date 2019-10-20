@@ -1,7 +1,11 @@
 package ru.otus.spring.library.jpa.services;
 
-import ru.otus.spring.library.jpa.domain.Comment;
-
 public interface CommentsService {
+
+    void findCommentsFromBook(Long bookId);
+
+    void setCommentFromBook(Long bookId, String commentText);
+
+    void deleteComment(Long commentId);
 
 }

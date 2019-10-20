@@ -1,14 +1,18 @@
 package ru.otus.spring.library.jpa.repository.impl;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.library.jpa.domain.Genre;
 import ru.otus.spring.library.jpa.repository.GenresRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @SuppressWarnings("JpaQlInspection")
 @Repository
@@ -30,28 +34,28 @@ public class GenresRepositoryJpa implements GenresRepository {
     }
 
     @Override
-    public Genre findGenreByName(String name) {
-        return (Genre) em.createQuery("SELECT g FROM Genre g WHERE g.genreName LIKE :name")
-                .setParameter("name", name).getSingleResult();
+    public Optional<Genre> findGenreByName(String name) {
+        Objects.requireNonNull(name);
+        TypedQuery<Genre> genreTypedQuery = em.createQuery(
+                "SELECT g FROM Genre g WHERE LOWER (g.genreName) =: name", Genre.class)
+                .setParameter("name", name.toLowerCase());
+
+        try {
+            Genre genre = genreTypedQuery.getSingleResult();
+            return Optional.of(genre);
+
+        } catch (EmptyResultDataAccessException | NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public void insertGenre(Genre genre) {
-        em.persist(genre);
-    }
-
-    @Override
-    public void updateGenre(Genre genre) {
-        Query query = em.createQuery("UPDATE Genre g SET genreName = :name WHERE g.genreId = :id")
-                .setParameter("name", genre.getGenreName())
-                .setParameter("id", genre.getGenreId());
-        query.executeUpdate();
-    }
-
-    @Override
-    public boolean isExists(String name) {
-        Query query = em.createQuery("SELECT 1 FROM Genre g WHERE g.genreName LIKE :name")
-                .setParameter("name", name);
-        return query.getResultList().size() > 0;
+    public Genre saveGenre (Genre genre) {
+        if (genre.getGenreId() <= 0) {
+            em.persist(genre);
+        } else {
+            em.merge(genre);
+        }
+        return genre;
     }
 }

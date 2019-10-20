@@ -8,6 +8,7 @@ import ru.otus.spring.library.jpa.services.GenresService;
 import ru.otus.spring.library.jpa.services.IOService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class GenresServiceImpl implements GenresService {
     private final IOService ioService;
 
     @Override
-    public void findAll() {
+    public void findAllGenres() {
         List<Genre> genreList = genresRepo.findAllGenres();
         ioService.printMsg("gs.msg.list");
         for (Genre genre : genreList) {
@@ -27,21 +28,23 @@ public class GenresServiceImpl implements GenresService {
 
     @Override
     public void insertGenre(String genreName) {
-        if (!genresRepo.isExists(genreName)) {
-            genresRepo.insertGenre(new Genre(genreName));
-        } else {
-            ioService.printMsg("gs.err.exists");
-        }
+        genresRepo.saveGenre(new Genre(genreName));
     }
 
     @Override
     public void updateGenreName(String originalGenreName, String changedGenreName) {
-        if (genresRepo.isExists(originalGenreName)) {
-            Genre genre = genresRepo.findGenreByName(originalGenreName);
+        try {
+            Genre genre = getGenreByName(originalGenreName);
             genre.setGenreName(changedGenreName);
-            genresRepo.updateGenre(genre);
-        } else {
+            genresRepo.saveGenre(genre);
+        } catch (Exception e) {
             ioService.printMsg("gs.err.not.exists");
         }
+    }
+
+    @Override
+    public Genre getGenreByName(String genreName) {
+        Optional<Genre> optGenre = genresRepo.findGenreByName(genreName);
+        return optGenre.orElseGet(() -> genresRepo.saveGenre(new Genre(genreName)));
     }
 }

@@ -8,6 +8,7 @@ databaseChangeLog:
           - column:
               name: bookid
               type: BIGINT
+              autoIncrement: true
               constraints:
                 nullable: false
                 primaryKey: true
@@ -95,6 +96,7 @@ databaseChangeLog:
                 nullable: false
                 foreignKeyName: fk_book_c
                 references: books(bookid)
+                deleteCascade: true
           - column:
               name: commentid
               type: BIGINT
@@ -103,4 +105,5 @@ databaseChangeLog:
                 nullable: false
                 foreignKeyName: fk_comment
                 references: comments(commentid)
+                deleteCascade: true
 

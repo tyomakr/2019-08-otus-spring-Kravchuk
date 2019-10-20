@@ -23,4 +23,25 @@ public class BooksRepositoryJpa implements BooksRepository {
         return em.createQuery("SELECT b FROM Book b").getResultList();
     }
 
+
+    @Override
+    public Book findBookById(long id) {
+        return em.find(Book.class, id);
+    }
+
+    @Override
+    public Book saveBook(Book book) {
+        if (book.getBookId() <= 0) {
+            em.persist(book);
+        } else {
+            em.merge(book);
+        }
+        return book;
+    }
+
+    @Override
+    public void deleteBook(Book book) {
+        em.remove(book);
+    }
+
 }

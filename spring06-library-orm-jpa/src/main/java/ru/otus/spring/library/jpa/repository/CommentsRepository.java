@@ -1,14 +1,17 @@
 package ru.otus.spring.library.jpa.repository;
 
+import ru.otus.spring.library.jpa.domain.Book;
 import ru.otus.spring.library.jpa.domain.Comment;
+
+import java.util.List;
 
 public interface CommentsRepository {
 
-    void findAllComments();
+    List<Comment> findCommentsFromBook(Book book);
 
-    void findCommentById(long id);
+    Comment findCommentById(Long id);
 
-    void saveComment(Comment c, long bookId);
+    void saveComment(Comment c);
 
-    void deleteComment(long id);
+    void deleteComment(Comment c);
 }

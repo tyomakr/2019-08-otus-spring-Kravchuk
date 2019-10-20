@@ -8,6 +8,7 @@ import ru.otus.spring.library.jpa.services.AuthorsService;
 import ru.otus.spring.library.jpa.services.IOService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class AuthorsServiceImpl implements AuthorsService {
     private final IOService ioService;
 
     @Override
-    public void findAll() {
+    public void findAllAuthors() {
         List<Author> authorList = authorsRepo.findAllAuthors();
         ioService.printMsg("as.msg.list");
         for (Author author : authorList) {
@@ -29,29 +30,21 @@ public class AuthorsServiceImpl implements AuthorsService {
     @Override
     public void insertAuthor(String authorName) {
         authorsRepo.saveAuthor(new Author(authorName));
-//        if (!authorsRepo.isExists(authorName)) {
-//            authorsRepo.saveAuthor(new Author(authorName));
-//        } else {
-//            ioService.printMsg("as.err.exists");
-//        }
     }
 
     @Override
     public void updateAuthorName(String originalAuthorName, String changedAuthorName) {
         try {
-            Author author = authorsRepo.findAuthorByName(originalAuthorName);
+            Author author = getAuthorByName(originalAuthorName);
             author.setAuthorName(changedAuthorName);
             authorsRepo.saveAuthor(author);
         } catch (Exception e) {
             ioService.printMsg("as.err.not.exists");
         }
+    }
 
-//        if (authorsRepo.isExists(originalAuthorName)) {
-//            Author author = authorsRepo.findAuthorByName(originalAuthorName);
-//            author.setAuthorName(changedAuthorName);
-//            authorsRepo.saveAuthor(author);
-//        } else {
-//            ioService.printMsg("as.err.not.exists");
-//        }
+    public Author getAuthorByName(String authorName) {
+        Optional<Author> optAuthor = authorsRepo.findAuthorByName(authorName);
+        return optAuthor.orElseGet(() -> authorsRepo.saveAuthor(new Author(authorName)));
     }
 }

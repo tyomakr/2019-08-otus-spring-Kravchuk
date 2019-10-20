@@ -1,14 +1,18 @@
 package ru.otus.spring.library.jpa.repository.impl;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.library.jpa.domain.Author;
 import ru.otus.spring.library.jpa.repository.AuthorsRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @SuppressWarnings("JpaQlInspection")
 @Repository
@@ -30,32 +34,28 @@ public class AuthorsRepositoryJpa implements AuthorsRepository {
     }
 
     @Override
-    public Author findAuthorByName(String name) {
-        return (Author) em.createQuery("SELECT a FROM Author a WHERE a.authorName LIKE :name")
-                .setParameter("name", name).getSingleResult();
+    public Optional<Author> findAuthorByName(String name) {
+        Objects.requireNonNull(name);
+        TypedQuery<Author> authorTypedQuery = em.createQuery(
+                "SELECT a FROM Author a WHERE LOWER (a.authorName) =: name", Author.class)
+                .setParameter("name", name.toLowerCase());
+
+        try {
+            Author author = authorTypedQuery.getSingleResult();
+            return Optional.of(author);
+
+        } catch (EmptyResultDataAccessException | NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public void saveAuthor(Author author) {
+    public Author saveAuthor(Author author) {
         if (author.getAuthorId() <= 0) {
             em.persist(author);
         } else {
             em.merge(author);
         }
+        return author;
     }
-
-//    @Override
-//    public void updateAuthor(Author author) {
-//        Query query = em.createQuery("UPDATE Author a SET authorName = :name WHERE a.authorId = :id")
-//                .setParameter("name", author.getAuthorName())
-//                .setParameter("id", author.getAuthorId());
-//        query.executeUpdate();
-//    }
-
-//    @Override
-//    public boolean isExists(String name) {
-//        Query query = em.createQuery("SELECT 1 FROM Author a WHERE a.authorName LIKE :name")
-//                .setParameter("name", name);
-//        return query.getResultList().size() > 0;
-//    }
 }

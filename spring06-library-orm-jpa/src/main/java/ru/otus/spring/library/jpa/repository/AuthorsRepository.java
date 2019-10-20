@@ -3,6 +3,7 @@ package ru.otus.spring.library.jpa.repository;
 import ru.otus.spring.library.jpa.domain.Author;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AuthorsRepository {
 
@@ -10,11 +11,7 @@ public interface AuthorsRepository {
 
     Author findAuthorById(long id);
 
-    Author findAuthorByName(String authorName);
+    Optional<Author> findAuthorByName(String authorName);
 
-    void saveAuthor(Author author);
-
-//    void updateAuthor(Author author);
-
-//    boolean isExists(String authorName);
+    Author saveAuthor(Author author);
 }

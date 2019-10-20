@@ -14,12 +14,17 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="commentid", unique = true, nullable = false)
-    private long authorId;
+    private long commentId;
     @Column(name ="commenttext")
-    private String authorName;
+    private String commentText;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinTable(name = "bookscomments", joinColumns = @JoinColumn(name = "bookid"), inverseJoinColumns = @JoinColumn(name = "commentid"))
     private Book book;
 
+
+    public Comment(String commentText, Book book) {
+        this.commentText = commentText;
+        this.book = book;
+    }
 }
