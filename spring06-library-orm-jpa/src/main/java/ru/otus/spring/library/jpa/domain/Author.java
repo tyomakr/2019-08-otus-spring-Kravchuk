@@ -1,5 +1,6 @@
 package ru.otus.spring.library.jpa.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "authors")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Author {
 
     @Id
