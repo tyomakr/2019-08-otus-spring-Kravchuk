@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0002-genre
+      author: tyomakr
+      createTable:
+        tableName: genres
+        columns:
+          - column:
+              name: genreid
+              type: BIGINT
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_genres
+
+          - column:
+              name: genrename
+              type: varchar(200)
+              constraints:
+                unique: true
