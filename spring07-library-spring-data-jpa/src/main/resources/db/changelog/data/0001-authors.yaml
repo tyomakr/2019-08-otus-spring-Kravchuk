@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0001-authors-data
+      author: tyomakr
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: authorid
+        file: data/authors.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: authors

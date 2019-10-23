@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0001-genres-data
+      author: tyomakr
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: genreid
+        file: data/genres.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: genres
