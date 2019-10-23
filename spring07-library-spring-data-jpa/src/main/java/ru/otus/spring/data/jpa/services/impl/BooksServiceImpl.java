@@ -28,7 +28,7 @@ public class BooksServiceImpl implements BooksService {
     @Override
     @Transactional
     public void findAllBooks() {
-        List<Book> bookList = booksRepo.findAllBooks();
+        List<Book> bookList = booksRepo.findAll();
         ioService.printMsg("bs.msg.list");
 
         String tableFormatter = "%-4s %-50s %-50s %-50s %n";
@@ -51,7 +51,7 @@ public class BooksServiceImpl implements BooksService {
         Genre genre = gs.getGenreByName(genreName);
 
         Book book = new Book(bookName, author, genre);
-        booksRepo.saveBook(book);
+        booksRepo.save(book);
     }
 
     @Override
@@ -59,9 +59,11 @@ public class BooksServiceImpl implements BooksService {
     public void addAuthorToBook(Long bookId, String authorName){
 
         Author author = as.getAuthorByName(authorName);
-        Book book = booksRepo.findBookById(bookId);
-        book.getAuthorsList().add(author);
-        booksRepo.saveBook(book);
+        Optional<Book> book = booksRepo.findById(bookId);
+        if(book.isPresent() ) {
+            book.get().getAuthorsList().add(author);
+            booksRepo.save(book.get());
+        }
     }
 
     @Override
@@ -69,20 +71,20 @@ public class BooksServiceImpl implements BooksService {
     public void addGenreToBook(Long bookId, String genreName) {
 
         Genre genre = gs.getGenreByName(genreName);
-        Book book = booksRepo.findBookById(bookId);
-        book.getGenresList().add(genre);
-        booksRepo.saveBook(book);
+        Optional<Book> book = booksRepo.findById(bookId);
+        if (book.isPresent()) {
+            book.get().getGenresList().add(genre);
+            booksRepo.save(book.get());
+        }
     }
 
 
     @Override
     public void updateBookName(Long bookId, String newBookName) {
-        try {
-            Book book = booksRepo.findBookById(bookId);
-            book.setBookName(newBookName);
-            booksRepo.saveBook(book);
-        } catch (Exception e) {
-            ioService.printMsg("bs.err.not.found");
+        Optional<Book> book = booksRepo.findById(bookId);
+        if (book.isPresent()) {
+            book.get().setBookName(newBookName);
+            booksRepo.save(book.get());
         }
     }
 
@@ -90,25 +92,28 @@ public class BooksServiceImpl implements BooksService {
     @Transactional
     public void updateBookAuthor(Long bookId, String originalBookAuthor, String changedBookAuthor) {
 
-        Book book = booksRepo.findBookById(bookId);
-        Author chAuthor = as.getAuthorByName(changedBookAuthor);
-        boolean isChanged = false;
-        List<Author> al = book.getAuthorsList();
+        Optional<Book> book = booksRepo.findById(bookId);
 
-        for (Author a : al) {
-            if (a.getAuthorName().equalsIgnoreCase(originalBookAuthor)) {
-                ioService.printMsg("bs.msg.ca.change");
-                al.remove(a);
-                al.add(chAuthor);
-                isChanged = true;
+        if (book.isPresent()) {
+            Author chAuthor = as.getAuthorByName(changedBookAuthor);
+            boolean isChanged = false;
+            List<Author> al = book.get().getAuthorsList();
+
+            for (Author a : al) {
+                if (a.getAuthorName().equalsIgnoreCase(originalBookAuthor)) {
+                    ioService.printMsg("bs.msg.ca.change");
+                    al.remove(a);
+                    al.add(chAuthor);
+                    isChanged = true;
+                }
             }
-        }
-        if (isChanged) {
-            book.setAuthorsList(al);
-            booksRepo.saveBook(book);
-            ioService.printMsg("bs.msg.ca.changed");
-        } else {
-            ioService.printMsg("bs.msg.not.changed");
+            if (isChanged) {
+                book.get().setAuthorsList(al);
+                booksRepo.save(book.get());
+                ioService.printMsg("bs.msg.ca.changed");
+            } else {
+                ioService.printMsg("bs.msg.not.changed");
+            }
         }
     }
 
@@ -116,46 +121,51 @@ public class BooksServiceImpl implements BooksService {
     @Transactional
     public void updateBookGenre(Long bookId, String originalBookGenre, String changedBookGenre) {
 
-        Book book = booksRepo.findBookById(bookId);
-        Genre chGenre = gs.getGenreByName(changedBookGenre);
-        boolean isChanged = false;
-        List<Genre> gl = book.getGenresList();
+        Optional<Book> book = booksRepo.findById(bookId);
 
-        for (Genre g : gl) {
-            if (g.getGenreName().equalsIgnoreCase(originalBookGenre)) {
-                ioService.printMsg("bs.msg.cg.change");
-                gl.remove(g);
-                gl.add(chGenre);
-                isChanged = true;
+        if (book.isPresent()) {
+            Genre chGenre = gs.getGenreByName(changedBookGenre);
+            boolean isChanged = false;
+            List<Genre> gl = book.get().getGenresList();
+
+            for (Genre g : gl) {
+                if (g.getGenreName().equalsIgnoreCase(originalBookGenre)) {
+                    ioService.printMsg("bs.msg.cg.change");
+                    gl.remove(g);
+                    gl.add(chGenre);
+                    isChanged = true;
+                }
             }
-        }
-        if (isChanged) {
-            book.setGenresList(gl);
-            booksRepo.saveBook(book);
-            ioService.printMsg("bs.msg.cg.changed");
-        } else {
-            ioService.printMsg("bs.msg.not.changed");
+            if (isChanged) {
+                book.get().setGenresList(gl);
+                booksRepo.save(book.get());
+                ioService.printMsg("bs.msg.cg.changed");
+            } else {
+                ioService.printMsg("bs.msg.not.changed");
+            }
         }
     }
 
     @Override
     @Transactional
     public void deleteBook(Long id) {
-        Optional<Book> book = Optional.ofNullable(booksRepo.findBookById(id));
-        book.ifPresent(booksRepo::deleteBook);
+        Optional<Book> book = booksRepo.findById(id);
+        book.ifPresent(booksRepo::delete);
     }
 
 
     @Override
     @Transactional
     public void removeAuthorToBook(Long bookId, String authorName) {
-        try {
-            Book book = booksRepo.findBookById(bookId);
+
+        Optional<Book> book = booksRepo.findById(bookId);
+
+        if (book.isPresent()) {
             boolean isChanged = false;
 
-            if (book.getAuthorsList().size() > 1) {
-                List<Author>al = book.getAuthorsList();
-                for(Author author : al) {
+            if (book.get().getAuthorsList().size() > 1) {
+                List<Author> al = book.get().getAuthorsList();
+                for (Author author : al) {
                     if (author.getAuthorName().equalsIgnoreCase(authorName)) {
                         al.remove(author);
                         isChanged = true;
@@ -163,27 +173,26 @@ public class BooksServiceImpl implements BooksService {
                 }
             }
             if (isChanged) {
-                booksRepo.saveBook(book);
+                booksRepo.save(book.get());
             }
             if (!isChanged) {
                 ioService.printMsg("bs.msg.not.changed");
             }
-
-        } catch (Exception e) {
-            ioService.printMsg("bs.err.not.found");
         }
     }
 
     @Override
     @Transactional
     public void removeGenreToBook(Long bookId, String genreName) {
-        try {
-            Book book = booksRepo.findBookById(bookId);
+
+        Optional<Book> book = booksRepo.findById(bookId);
+
+        if (book.isPresent()) {
             boolean isChanged = false;
 
-            if (book.getGenresList().size() > 1) {
-                List<Genre>gl = book.getGenresList();
-                for(Genre genre : gl) {
+            if (book.get().getGenresList().size() > 1) {
+                List<Genre> gl = book.get().getGenresList();
+                for (Genre genre : gl) {
                     if (genre.getGenreName().equalsIgnoreCase(genreName)) {
                         gl.remove(genre);
                         isChanged = true;
@@ -191,16 +200,13 @@ public class BooksServiceImpl implements BooksService {
                 }
             }
             if (isChanged) {
-                booksRepo.saveBook(book);
+                booksRepo.save(book.get());
             }
             if (!isChanged) {
                 ioService.printMsg("bs.msg.not.changed");
             }
 
-            booksRepo.saveBook(book);
-        } catch (Exception e) {
-            ioService.printMsg("bs.err.not.found");
+            booksRepo.save(book.get());
         }
     }
-
 }

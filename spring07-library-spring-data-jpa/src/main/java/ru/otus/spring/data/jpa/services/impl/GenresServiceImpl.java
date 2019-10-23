@@ -19,7 +19,7 @@ public class GenresServiceImpl implements GenresService {
 
     @Override
     public void findAllGenres() {
-        List<Genre> genreList = genresRepo.findAllGenres();
+        List<Genre> genreList = genresRepo.findAll();
         ioService.printMsg("gs.msg.list");
         for (Genre genre : genreList) {
             ioService.printItemsList("%-4s %-50s %n", genre.getGenreId(), genre.getGenreName());
@@ -28,7 +28,7 @@ public class GenresServiceImpl implements GenresService {
 
     @Override
     public void insertGenre(String genreName) {
-        genresRepo.saveGenre(new Genre(genreName));
+        genresRepo.save(new Genre(genreName));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class GenresServiceImpl implements GenresService {
         try {
             Genre genre = getGenreByName(originalGenreName);
             genre.setGenreName(changedGenreName);
-            genresRepo.saveGenre(genre);
+            genresRepo.save(genre);
         } catch (Exception e) {
             ioService.printMsg("gs.err.not.exists");
         }
@@ -44,7 +44,7 @@ public class GenresServiceImpl implements GenresService {
 
     @Override
     public Genre getGenreByName(String genreName) {
-        Optional<Genre> optGenre = genresRepo.findGenreByName(genreName);
-        return optGenre.orElseGet(() -> genresRepo.saveGenre(new Genre(genreName)));
+        Optional<Genre> optGenre = genresRepo.findGenreByGenreName(genreName);
+        return optGenre.orElseGet(() -> genresRepo.save(new Genre(genreName)));
     }
 }

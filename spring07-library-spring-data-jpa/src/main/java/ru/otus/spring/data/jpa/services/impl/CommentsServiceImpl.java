@@ -25,23 +25,27 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     @Transactional
     public void findCommentsFromBook(Long bookId) {
-        Book book = booksRepo.findBookById(bookId);
-        List<Comment> comments = commentsRepo.findCommentsFromBook(book);
-        printCommentsList(comments);
+
+        Optional<Book> book = booksRepo.findById(bookId);
+
+        if (book.isPresent()) {
+            List<Comment> comments = commentsRepo.findCommentByBook(book.get());
+            printCommentsList(comments);
+        }
     }
 
     @Override
     @Transactional
     public void setCommentFromBook(Long bookId, String commentText) {
-        Optional<Book> book = Optional.ofNullable(booksRepo.findBookById(bookId));
-        commentsRepo.saveComment(new Comment(commentText, book.get()));
+        Optional<Book> book = booksRepo.findById(bookId);
+        book.ifPresent(value -> commentsRepo.save(new Comment(commentText, value)));
     }
 
     @Override
     @Transactional
     public void deleteComment(Long commentId) {
-        Optional<Comment> comment = Optional.ofNullable(commentsRepo.findCommentById(commentId));
-        comment.ifPresent(commentsRepo::deleteComment);
+        Optional<Comment> comment = commentsRepo.findById(commentId);
+        comment.ifPresent(commentsRepo::delete);
     }
 
 

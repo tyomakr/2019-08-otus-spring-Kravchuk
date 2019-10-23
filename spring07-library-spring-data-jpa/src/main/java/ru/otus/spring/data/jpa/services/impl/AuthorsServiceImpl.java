@@ -19,7 +19,7 @@ public class AuthorsServiceImpl implements AuthorsService {
 
     @Override
     public void findAllAuthors() {
-        List<Author> authorList = authorsRepo.findAllAuthors();
+        List<Author> authorList = authorsRepo.findAll();
         ioService.printMsg("as.msg.list");
         for (Author author : authorList) {
             ioService.printItemsList("%-4s %-50s %n", author.getAuthorId(), author.getAuthorName());
@@ -29,7 +29,7 @@ public class AuthorsServiceImpl implements AuthorsService {
 
     @Override
     public void insertAuthor(String authorName) {
-        authorsRepo.saveAuthor(new Author(authorName));
+        authorsRepo.save(new Author(authorName));
     }
 
     @Override
@@ -37,14 +37,14 @@ public class AuthorsServiceImpl implements AuthorsService {
         try {
             Author author = getAuthorByName(originalAuthorName);
             author.setAuthorName(changedAuthorName);
-            authorsRepo.saveAuthor(author);
+            authorsRepo.save(author);
         } catch (Exception e) {
             ioService.printMsg("as.err.not.exists");
         }
     }
 
     public Author getAuthorByName(String authorName) {
-        Optional<Author> optAuthor = authorsRepo.findAuthorByName(authorName);
-        return optAuthor.orElseGet(() -> authorsRepo.saveAuthor(new Author(authorName)));
+        Optional<Author> optAuthor = authorsRepo.findAuthorByAuthorName(authorName);
+        return optAuthor.orElseGet(() -> authorsRepo.save(new Author(authorName)));
     }
 }

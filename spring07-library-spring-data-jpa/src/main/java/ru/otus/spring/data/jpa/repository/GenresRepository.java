@@ -1,17 +1,11 @@
 package ru.otus.spring.data.jpa.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.spring.data.jpa.domain.Genre;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface GenresRepository {
+public interface GenresRepository extends JpaRepository<Genre, Long> {
 
-    List<Genre> findAllGenres();
-
-    Genre findGenreById(long id);
-
-    Optional<Genre> findGenreByName(String genreName);
-
-    Genre saveGenre(Genre genre);
+    Optional <Genre> findGenreByGenreName(String genreName);
 }
