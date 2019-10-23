@@ -51,7 +51,7 @@ public class ShellCommands {
     }
 
     @ShellMethod(value = "Добавить автора в книгу", key = {"b3", "add-author-book", "aab"})
-    private void addAuthorToBook(@ShellOption(UNDEF) String bookId, @ShellOption(UNDEF) String authorName) {
+    private void addAuthorToBook(@ShellOption(defaultValue = UNDEF) String bookId, @ShellOption(defaultValue = UNDEF) String authorName) {
         if (bookId.matches("\\d+") && !authorName.equalsIgnoreCase(UNDEF)) {
             bs.addAuthorToBook(Long.parseLong(bookId), authorName);
         } else {
@@ -60,7 +60,7 @@ public class ShellCommands {
     }
 
     @ShellMethod(value = "Добавить жанр в книгу", key = {"b4", "add-genre-book", "agb"})
-    private void addGenreToBook(@ShellOption(UNDEF) String bookId, @ShellOption(UNDEF) String genreName) {
+    private void addGenreToBook(@ShellOption(defaultValue = UNDEF) String bookId, @ShellOption(defaultValue = UNDEF) String genreName) {
         if(bookId.matches("\\d+") && !genreName.equalsIgnoreCase(UNDEF)) {
             bs.addGenreToBook(Long.parseLong(bookId), genreName);
         } else {
@@ -100,7 +100,7 @@ public class ShellCommands {
     }
 
     @ShellMethod(value = "Удалить книгу по ID", key = {"b8", "delete-book", "del"})
-    private void deleteBook(@ShellOption(UNDEF) String bookId) {
+    private void deleteBook(@ShellOption(defaultValue = UNDEF) String bookId) {
         if (bookId.matches("\\d+")) {
             bs.deleteBook(Long.parseLong(bookId));
         } else {
@@ -109,7 +109,7 @@ public class ShellCommands {
     }
 
     @ShellMethod(value = "Удалить автора из книги", key = {"b9", "remove-author-book", "rab"})
-    private void removeAuthorToBook(@ShellOption(UNDEF) String bookId, @ShellOption(UNDEF) String authorName) {
+    private void removeAuthorToBook(@ShellOption(defaultValue = UNDEF) String bookId, @ShellOption(defaultValue = UNDEF) String authorName) {
         if (bookId.matches("\\d+") && !authorName.equalsIgnoreCase(UNDEF)) {
             bs.removeAuthorToBook(Long.parseLong(bookId), authorName);
         } else {
@@ -118,7 +118,7 @@ public class ShellCommands {
     }
 
     @ShellMethod(value = "Удалить жанр из книги", key = {"b10", "remove-genre-book", "rgb"})
-    private void removeGenreToBook(@ShellOption(UNDEF) String bookId, @ShellOption(UNDEF) String genreName) {
+    private void removeGenreToBook(@ShellOption(defaultValue = UNDEF) String bookId, @ShellOption(UNDEF) String genreName) {
         if (bookId.matches("\\d+") && !genreName.equalsIgnoreCase(UNDEF)) {
             bs.removeGenreToBook(Long.parseLong(bookId), genreName);
         } else {

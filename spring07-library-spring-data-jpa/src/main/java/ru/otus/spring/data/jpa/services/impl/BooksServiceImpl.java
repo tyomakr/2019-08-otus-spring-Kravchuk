@@ -12,6 +12,8 @@ import ru.otus.spring.data.jpa.services.BooksService;
 import ru.otus.spring.data.jpa.services.GenresService;
 import ru.otus.spring.data.jpa.services.IOService;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -97,17 +99,18 @@ public class BooksServiceImpl implements BooksService {
         if (book.isPresent()) {
             Author chAuthor = as.getAuthorByName(changedBookAuthor);
             boolean isChanged = false;
-            List<Author> al = book.get().getAuthorsList();
 
-            for (Author a : al) {
-                if (a.getAuthorName().equalsIgnoreCase(originalBookAuthor)) {
-                    ioService.printMsg("bs.msg.ca.change");
-                    al.remove(a);
-                    al.add(chAuthor);
+            List<Author> al = new ArrayList<>(book.get().getAuthorsList());
+
+            for(Iterator<Author> iterator = al.iterator(); iterator.hasNext();) {
+                if (iterator.next().getAuthorName().equalsIgnoreCase(originalBookAuthor)) {
+                    iterator.remove();
                     isChanged = true;
                 }
             }
+
             if (isChanged) {
+                al.add(chAuthor);
                 book.get().setAuthorsList(al);
                 booksRepo.save(book.get());
                 ioService.printMsg("bs.msg.ca.changed");
@@ -126,17 +129,17 @@ public class BooksServiceImpl implements BooksService {
         if (book.isPresent()) {
             Genre chGenre = gs.getGenreByName(changedBookGenre);
             boolean isChanged = false;
-            List<Genre> gl = book.get().getGenresList();
+            List<Genre> gl = new ArrayList<>(book.get().getGenresList());
 
-            for (Genre g : gl) {
-                if (g.getGenreName().equalsIgnoreCase(originalBookGenre)) {
-                    ioService.printMsg("bs.msg.cg.change");
-                    gl.remove(g);
-                    gl.add(chGenre);
+            for(Iterator<Genre> iterator = gl.iterator(); iterator.hasNext();) {
+                if (iterator.next().getGenreName().equalsIgnoreCase(originalBookGenre)) {
+                    iterator.remove();
                     isChanged = true;
                 }
             }
+
             if (isChanged) {
+                gl.add(chGenre);
                 book.get().setGenresList(gl);
                 booksRepo.save(book.get());
                 ioService.printMsg("bs.msg.cg.changed");
