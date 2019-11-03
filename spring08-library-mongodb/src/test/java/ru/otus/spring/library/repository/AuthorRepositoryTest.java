@@ -10,6 +10,9 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
 import ru.otus.spring.library.model.Author;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
@@ -21,15 +24,17 @@ class AuthorRepositoryTest {
     @Autowired
     AuthorRepository authorRepository;
 
-    private static final Author TEST_AUTHOR = new Author("Джон Рональд Руэл Толкин");
-    private static final Author TEST_AUTHOR_LCASE = new Author("джон рональд руэл толкин");
+    private static final Author TEST_AUTHOR = new Author("TEST AUTHOR");
+    private static final Author TEST_AUTHOR_LCASE = new Author("test author");
     private static final Author NOT_EXISTING_AUTHOR = new Author("NOT_EX_AUTHOR");
 
     @Test
     @DisplayName("возвращать автора по его имени")
     void findAuthorByAuthorName() {
+        authorRepository.save(TEST_AUTHOR);
         val tAuthor = authorRepository.findAuthorByAuthorName(TEST_AUTHOR.getAuthorName());
-        assertEquals(tAuthor.get().getAuthorName(), TEST_AUTHOR.getAuthorName());
+        assertThat(tAuthor).isEqualTo(Optional.of(TEST_AUTHOR));
+        assertThat(tAuthor).contains(TEST_AUTHOR);
     }
 
     @Test

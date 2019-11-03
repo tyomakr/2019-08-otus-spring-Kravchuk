@@ -25,6 +25,7 @@ public class Book {
     @DBRef
     @Field(name = "authors")
     private List<Author> authors;
+    @DBRef
     @Field(name = "genres")
     private List<Genre> genres;
 

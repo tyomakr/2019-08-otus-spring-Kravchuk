@@ -38,7 +38,6 @@ public class GenreServiceImpl implements GenreService {
         else {
             ioService.printMsg("gs.err.g.exists");
         }
-
     }
 
     @Override

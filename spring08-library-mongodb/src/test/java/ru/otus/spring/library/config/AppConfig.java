@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-    private static final String CHANGELOGS_PACKAGE = "ru.otus.spring.library.config.changelog";
+    private static final String CHANGELOGS_PACKAGE = "ru.otus.spring.library.config.testchangelog";
 
     @Bean
     public Mongock mongock(MongoProps mongoProps, MongoClient mongoClient) {

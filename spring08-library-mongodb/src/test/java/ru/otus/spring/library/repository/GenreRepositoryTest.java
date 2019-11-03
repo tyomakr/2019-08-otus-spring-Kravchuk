@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
 import ru.otus.spring.library.model.Genre;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
@@ -20,15 +21,16 @@ class GenreRepositoryTest {
     @Autowired
     GenreRepository genreRepository;
 
-    private static final Genre TEST_GENRE = new Genre("Детектив");
-    private static final Genre TEST_GENRE_UCASE = new Genre("ДЕТЕКТИВ");
+    private static final Genre TEST_GENRE = new Genre("TEST_G");
+    private static final Genre TEST_GENRE_UCASE = new Genre("test_g");
     private static final Genre NOT_EXISTS_GENRE = new Genre("NOT_EX_GENRE");
 
     @Test
     @DisplayName("возвращать жанр по его названию")
     void findGenreByGenreTitle() {
+        genreRepository.save(TEST_GENRE);
         val tGenre = genreRepository.findGenreByGenreTitle(TEST_GENRE.getGenreTitle());
-        assertEquals(tGenre.get().getGenreTitle(), TEST_GENRE.getGenreTitle());
+        assertThat(tGenre).contains(TEST_GENRE);
     }
 
     @Test

@@ -52,74 +52,54 @@ public class BookServiceImpl implements BookService {
     @Override
     public void updateBookName(String bookId, String newBookTitle) {
 
-        Optional<Book> bookOptional = bookRepository.findById(bookId);
-        if (bookOptional.isPresent()) {
-            Book book = bookOptional.get();
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        ioService.printMsg(optionalBook.map(book ->{
             book.setTitle(newBookTitle);
             bookRepository.save(book);
-        } else {
-            ioService.printMsg("bs.err.b.id.not.exist");
-        }
-
+            return "bs.bn.updated";
+        }).orElse("bs.err.b.id.not.exist"));
     }
 
     @Override
     public void updateBookAuthor(String bookId, String oldBookAuthor, String newBookAuthor) {
 
         Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isPresent()) {
-
+        ioService.printMsg(optionalBook.map(book -> {
             Author changedAuthor = findOrCreateAuthor(newBookAuthor);
-            List<Author> al = new ArrayList<>(optionalBook.get().getAuthors());
-            al.removeIf(author -> author.getAuthorName().equalsIgnoreCase(oldBookAuthor));
-
-            al.add(changedAuthor);
-            optionalBook.get().setAuthors(al);
-
+            List<Author> authors = book.getAuthors();
+            authors.removeIf(author -> author.getAuthorName().equalsIgnoreCase(oldBookAuthor));
+            authors.add(changedAuthor);
             bookRepository.save(optionalBook.get());
-            ioService.printMsg("bs.au.updated");
-        } else {
-            ioService.printMsg("bs.err.b.id.not.exist");
-        }
+            return "bs.au.updated";
+        }).orElse("bs.err.b.id.not.exist"));
     }
 
     @Override
     public void updateBookGenre(String bookId, String oldBookGenre, String newBookGenre) {
 
         Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isPresent()) {
-
+        ioService.printMsg(optionalBook.map(book -> {
             Genre changedGenre = findOrCreateGenre(newBookGenre);
-            List<Genre> gl = new ArrayList<>(optionalBook.get().getGenres());
-            gl.removeIf(genre -> genre.getGenreTitle().equalsIgnoreCase(oldBookGenre));
-
-            gl.add(changedGenre);
-            optionalBook.get().setGenres(gl);
-
+            List<Genre> genres = book.getGenres();
+            genres.removeIf(genre -> genre.getGenreTitle().equalsIgnoreCase(oldBookGenre));
+            genres.add(changedGenre);
             bookRepository.save(optionalBook.get());
-            ioService.printMsg("bs.gu.updated");
-        } else {
-            ioService.printMsg("bs.err.b.id.not.exist");
-        }
+            return "bs.gu.updated";
+        }).orElse("bs.err.b.id.not.exist"));
     }
 
     @Override
     public void addBookAuthor(String bookId, String bookAuthor) {
 
-        Author author = findOrCreateAuthor(bookAuthor);
-
-        Optional<Book> bookOptional = bookRepository.findById(bookId);
-        if (bookOptional.isPresent()) {
-
-            Book book = bookOptional.get();
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        ioService.printMsg(optionalBook.map(book -> {
+            Author author = findOrCreateAuthor(bookAuthor);
             List<Author> al = book.getAuthors();
             al.add(author);
             book.setAuthors(al);
-
             bookRepository.save(book);
-        } else {
-            ioService.printMsg("bs.err.b.id.not.exist");
-        }
+            return "bs.au.added";
+        }).orElse("bs.err.b.id.not.exist"));
     }
 
     @Override
@@ -146,21 +126,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public void addBookGenre(String bookId, String bookGenre) {
 
-        Genre genre = findOrCreateGenre(bookGenre);
-
-        Optional<Book> bookOptional = bookRepository.findById(bookId);
-
-        if (bookOptional.isPresent()) {
-            Book book = bookOptional.get();
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        ioService.printMsg(optionalBook.map(book -> {
+            Genre genre = findOrCreateGenre(bookGenre);
             List<Genre> gl = book.getGenres();
             gl.add(genre);
             book.setGenres(gl);
-
             bookRepository.save(book);
-        } else {
-            ioService.printMsg("bs.err.b.id.not.exist");
-        }
-
+            return "bs.gu.added";
+        }).orElse("bs.err.b.id.not.exist"));
     }
 
     @Override
