@@ -1,0 +1,18 @@
+<main role="main" class="container" xmlns:th="http://www.w3.org/1999/xhtml">
+    <nav>
+        <h1 class="mt-5" th:text="#{w.main.menu.authors}">Authors</h1>
+
+        <table class="table">
+            <thead>
+            <th scope="col" th:text="#{w.list.a.id}">authorID</th>
+            <th scope="col" th:text="#{w.list.a.name}">authorName</th>
+            </thead>
+            <tbody>
+            <tr th:each="author : ${authorList}">
+                <td th:text="${author.id}">id</td>
+                <td th:text="${author.authorName}">name</td>
+            </tr>
+            </tbody>
+        </table>
+    </nav>
+</main>

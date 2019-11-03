@@ -1,0 +1,36 @@
+<main role="main" class="container" xmlns:th="http://www.w3.org/1999/xhtml">
+    <nav>
+
+        <h1 class="mt-5" th:text="#{w.book.edit.title}">Редактировать книгу</h1>
+
+        <form action="/books/editbook" id="edit-form" th:action="@{/editbook(id=${book.id})}" th:method="post">
+
+            <div class="form-group row mt-3">
+                <label class="col-sm-2 col-form-label" for="staticId" th:text="#{w.list.b.id}">ID книги</label>
+                <div class="col-sm-10">
+                    <input class="form-control-plaintext" type="text" id="staticId" readonly th:value="${book.id}" value="id">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 col-form-label" for="title" th:text="#{w.list.b.title}">Название книги</label>
+                <input class="form-control" type="text" id="title" th:value="${book.title}" value="title">
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 col-form-label" for="authors" th:text="#{w.list.a.name}">Автор</label>
+                <input class="form-control" type="text" id="authors" th:value="${book.authorsToString()}" value="authors">
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 col-form-label" for="genres" th:text="#{w.list.g.title}">Название жанра</label>
+                <input class="form-control" type="text" id="genres" th:value="${book.genresToString()}" value="genres">
+            </div>
+
+            <button type="submit">Save</button>
+        </form>
+    </nav>
+</main>
+
+
+

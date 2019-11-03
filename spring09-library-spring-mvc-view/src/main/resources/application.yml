@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost
+      port: 27017
+      database: libmongo
+
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+
+server:
+  port: 80

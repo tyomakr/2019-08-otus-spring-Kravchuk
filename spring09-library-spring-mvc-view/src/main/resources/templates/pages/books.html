@@ -1,0 +1,59 @@
+<main role="main" class="container" xmlns:th="http://www.w3.org/1999/xhtml">
+    <nav>
+        <h1 class="mt-5" th:text="#{w.main.menu.books}">Books</h1>
+
+        <div class="float-left my-sm-3">
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#createBookModal" th:text="#{w.list.b.add}">Add Book</button>
+        </div>
+
+        <div class="modal fade" id="createBookModal" tabindex="-1" role="dialog" aria-labelledby="createBookModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createBookModalLabel" th:text="#{w.list.modal.add.book}">Добавить книгу</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/books/create" method="post">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="title" name="title" aria-describedby="titleHelp">
+                                <small id="titleHelp" class="form-text text-muted" th:text="#{w.list.modal.hint.title}">Please enter book title</small>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="author" name="author" aria-describedby="authorHelp">
+                                <small id="authorHelp" class="form-text text-muted" th:text="#{w.list.modal.hint.author}">Please enter one book author</small>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="genre" name="genre" aria-describedby="genreHelp">
+                                <small id="genreHelp" class="form-text text-muted" th:text="#{w.list.modal.hint.genre}">Please enter book genre</small>
+                            </div>
+                            <div class="float-right my-sm 1">
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table id="booksList" class="table table-sm">
+            <thead>
+            <th scope="col" th:text="#{w.list.b.title}">Book Title</th>
+            <th scope="col" th:text="#{w.list.a.name}">Author</th>
+            <th scope="col" th:text="#{w.list.g.title}">Genre</th>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${bookList}">
+                <td class="w-45"><a th:href="@{/books/editbook(id=${book.id})}" href="editbook.html" th:text="${book.title}">title</a></td>
+                <td class="w-30" th:text="${book.authorsToString()}">authors</td>
+                <td class="w-25" th:text="${book.genresToString()}">genres</td>
+            </tr>
+            </tbody>
+        </table>
+    </nav>
+</main>
