@@ -6,5 +6,7 @@ public interface IOService {
 
     String getMsg(String s);
 
+    void printMsgWithValues(String s, String... args);
+
     void printItemsList(String format, Object... args);
 }

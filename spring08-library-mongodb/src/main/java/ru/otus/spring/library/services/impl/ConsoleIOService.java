@@ -22,6 +22,8 @@ public class ConsoleIOService implements IOService {
         return ms.getMessage(s, null, getLocale());
     }
 
+    public void printMsgWithValues(String s, String... args) { System.out.println(ms.getMessage(s, args, getLocale()));}
+
     public void printItemsList(String format, Object... args) {
         System.out.printf(format, args);
     }

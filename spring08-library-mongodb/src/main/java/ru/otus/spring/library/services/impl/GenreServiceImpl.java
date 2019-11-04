@@ -1,5 +1,6 @@
 package ru.otus.spring.library.services.impl;
 
+import com.mongodb.client.result.UpdateResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.library.model.Genre;
@@ -43,11 +44,13 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void updateGenre(String oldGenreTitle, String newGenreTitle) {
 
-        Optional<Genre> genre = genreRepository.findGenreByGenreTitle(oldGenreTitle);
-        if (genre.isPresent()) {
-            Genre updatedGenre = genre.get();
+        Optional<Genre> optionalGenre = genreRepository.findGenreByGenreTitle(oldGenreTitle);
+        if (optionalGenre.isPresent()) {
+            Genre updatedGenre = optionalGenre.get();
             updatedGenre.setGenreTitle(newGenreTitle);
             genreRepository.save(updatedGenre);
+            UpdateResult result = genreRepository.updateAllGenresInBooks(oldGenreTitle, newGenreTitle);
+            ioService.printMsgWithValues("gs.u.found", String.valueOf(result.getMatchedCount()), String.valueOf(result.getModifiedCount()));
         }
         else {
             ioService.printMsg("gs.err.g.not.exists");
