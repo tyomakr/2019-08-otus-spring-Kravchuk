@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
 @EnableConfigurationProperties
-@ComponentScan("ru.otus.spring.library")
+@ComponentScan("ru.otus.spring.library.repository.GenreRepository")
 @DisplayName("GenreRepository должен")
 class GenreRepositoryTest {
 

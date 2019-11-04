@@ -45,15 +45,13 @@ public class GenreServiceImpl implements GenreService {
     public void updateGenre(String oldGenreTitle, String newGenreTitle) {
 
         Optional<Genre> optionalGenre = genreRepository.findGenreByGenreTitle(oldGenreTitle);
-        if (optionalGenre.isPresent()) {
-            Genre updatedGenre = optionalGenre.get();
-            updatedGenre.setGenreTitle(newGenreTitle);
-            genreRepository.save(updatedGenre);
+
+        ioService.printMsg(optionalGenre.map(genre -> {
+            genre.setGenreTitle(newGenreTitle);
+            genreRepository.save(genre);
             UpdateResult result = genreRepository.updateAllGenresInBooks(oldGenreTitle, newGenreTitle);
             ioService.printMsgWithValues("gs.u.found", String.valueOf(result.getMatchedCount()), String.valueOf(result.getModifiedCount()));
-        }
-        else {
-            ioService.printMsg("gs.err.g.not.exists");
-        }
+            return "gs.u.done";
+        }).orElse("gs.err.g.not.exists"));
     }
 }

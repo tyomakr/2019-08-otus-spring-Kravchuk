@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @DataMongoTest
 @EnableConfigurationProperties
-@ComponentScan("ru.otus.spring.library")
+@ComponentScan("ru.otus.spring.library.repository.CommentRepository, ru.otus.spring.library.repository.CommentRepository, ru.otus.spring.library.config")
 @DisplayName("CommentRepository должен")
 class CommentRepositoryTest {
 

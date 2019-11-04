@@ -107,20 +107,15 @@ public class BookServiceImpl implements BookService {
 
         Optional<Book> optionalBook = bookRepository.findById(bookId);
 
-        if (optionalBook.isPresent() && optionalBook.get().getAuthors().size() > 1) {
-            List<Author> al = new ArrayList<>(optionalBook.get().getAuthors());
-            al.removeIf(author -> author.getAuthorName().equalsIgnoreCase(bookAuthor));
-            optionalBook.get().setAuthors(al);
-
-            bookRepository.save(optionalBook.get());
-            ioService.printMsg("bs.ar.removed");
-        }
-        else if (optionalBook.isPresent() && optionalBook.get().getAuthors().size() == 1) {
-            ioService.printMsg("bs.warn.a.one");
-        }
-        else {
-            ioService.printMsg("bs.err.b.id.not.exist");
-        }
+        ioService.printMsg(optionalBook
+                .filter(book -> book.getAuthors().size() > 1)
+                .map(book -> {
+                    List<Author> al = new ArrayList<>(optionalBook.get().getAuthors());
+                    al.removeIf(author -> author.getAuthorName().equalsIgnoreCase(bookAuthor));
+                    book.setAuthors(al);
+                    bookRepository.save(book);
+                    return "bs.ar.removed";
+                }).orElse("bs.err.b.rba"));
     }
 
     @Override
@@ -137,26 +132,20 @@ public class BookServiceImpl implements BookService {
         }).orElse("bs.err.b.id.not.exist"));
     }
 
+
     @Override
     public void removeBookGenre(String bookId, String bookGenre) {
 
         Optional<Book> optionalBook = bookRepository.findById(bookId);
-
-        if (optionalBook.isPresent() && optionalBook.get().getGenres().size() > 1) {
-
-            List<Genre> gl = new ArrayList<>(optionalBook.get().getGenres());
-            gl.removeIf(genre -> genre.getGenreTitle().equalsIgnoreCase(bookGenre));
-            optionalBook.get().setGenres(gl);
-
-            bookRepository.save(optionalBook.get());
-            ioService.printMsg("bs.gr.removed");
-        }
-        else if (optionalBook.isPresent() && optionalBook.get().getGenres().size() == 1) {
-            ioService.printMsg("bs.warn.g.one");
-        }
-        else {
-            ioService.printMsg("bs.err.b.id.not.exist");
-        }
+        ioService.printMsg(optionalBook
+                .filter(book -> book.getGenres().size() > 1)
+                .map(book -> {
+                    List<Genre> gl = new ArrayList<>(optionalBook.get().getGenres());
+                    gl.removeIf(genre -> genre.getGenreTitle().equalsIgnoreCase(bookGenre));
+                    book.setGenres(gl);
+                    bookRepository.save(book);
+                    return "bs.gr.removed";
+        }).orElse("bs.err.b.rbg"));
     }
 
 

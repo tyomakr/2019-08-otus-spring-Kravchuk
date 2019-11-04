@@ -42,15 +42,11 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void updateAuthor(String oldAuthorName, String newAuthorName) {
-
-        Optional<Author> author = authorRepository.findAuthorByAuthorName(oldAuthorName);
-        if (author.isPresent()) {
-            Author updatedAuthor = author.get();
-            updatedAuthor.setAuthorName(newAuthorName);
-            authorRepository.save(updatedAuthor);
-        }
-        else {
-            ioService.printMsg("as.err.a.not.exists");
-        }
+        Optional<Author> optionalAuthor = authorRepository.findAuthorByAuthorName(oldAuthorName);
+        ioService.printMsg(optionalAuthor.map(author ->{
+            author.setAuthorName(newAuthorName);
+            authorRepository.save(author);
+            return "as.a.updated";
+        }).orElse("as.err.a.not.exists"));
     }
 }
