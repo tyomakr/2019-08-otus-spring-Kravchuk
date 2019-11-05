@@ -3,7 +3,6 @@ package ru.otus.spring.library.webmvc.service;
 import ru.otus.spring.library.webmvc.domain.Book;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BookService {
 
@@ -12,4 +11,6 @@ public interface BookService {
     Book findById(String bookId);
 
     void insertBook(String bookTitle, String bookAuthor, String bookGenre);
+
+    void updateBook(Book book);
 }

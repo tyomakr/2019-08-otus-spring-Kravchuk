@@ -5,21 +5,21 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.library.webmvc.domain.Author;
 import ru.otus.spring.library.webmvc.domain.Book;
 import ru.otus.spring.library.webmvc.domain.Genre;
-import ru.otus.spring.library.webmvc.repository.AuthorRepository;
 import ru.otus.spring.library.webmvc.repository.BookRepository;
-import ru.otus.spring.library.webmvc.repository.GenreRepository;
+import ru.otus.spring.library.webmvc.service.AuthorService;
 import ru.otus.spring.library.webmvc.service.BookService;
+import ru.otus.spring.library.webmvc.service.GenreService;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-    private final AuthorRepository authorRepository;
-    private final GenreRepository genreRepository;
+    private final AuthorService authorService;
+    private final GenreService genreService;
 
     @Override
     public List<Book> findAll() {
@@ -33,20 +33,24 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void insertBook(String bookTitle, String bookAuthor, String bookGenre) {
-        Author author = findOrCreateAuthor(bookAuthor);
-        Genre genre = findOrCreateGenre(bookGenre);
+        Author author = authorService.findOrCreateAuthor(bookAuthor);
+        Genre genre = genreService.findOrCreateGenre(bookGenre);
 
         bookRepository.save(new Book(bookTitle, author, genre));
     }
 
+    @Override
+    public void updateBook(Book eBook) {
 
-    private Author findOrCreateAuthor(String bookAuthor) {
-        Optional<Author> authorOptional = authorRepository.findAuthorByAuthorName(bookAuthor);
-        return authorRepository.save(authorOptional.orElseGet(() -> new Author(bookAuthor)));
+        List<Author> al = new ArrayList<>();
+        for(Author a : eBook.getAuthors()) {
+            al.add(authorService.findOrCreateAuthor(a.getAuthorName()));
+        }
+        List<Genre> gl = new ArrayList<>();
+        for (Genre g : eBook.getGenres()) {
+            gl.add(genreService.findOrCreateGenre(g.getGenreTitle()));
+        }
+        bookRepository.save(new Book(eBook.getId(), eBook.getTitle(), al, gl));
     }
 
-    private Genre findOrCreateGenre(String bookGenre) {
-        Optional<Genre> genreOptional = genreRepository.findGenreByGenreTitle(bookGenre);
-        return genreRepository.save(genreOptional.orElseGet(() -> new Genre(bookGenre)));
-    }
 }
