@@ -1,4 +1,4 @@
-package ru.otus.spring.library.webmvc.config.changelog;
+package ru.otus.spring.library.webmvc.config.changelogtest;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;

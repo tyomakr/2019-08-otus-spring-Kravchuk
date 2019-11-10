@@ -8,6 +8,4 @@ import java.util.Optional;
 public interface AuthorRepository extends MongoRepository<Author, String> {
 
     Optional<Author> findAuthorByAuthorName(String authorName);
-
-    boolean existsByAuthorNameEqualsIgnoreCase(String authorName);
 }

@@ -5,9 +5,7 @@ import ru.otus.spring.library.webmvc.domain.Genre;
 
 import java.util.Optional;
 
-public interface GenreRepository extends MongoRepository<Genre, String>, GenreRepositoryCustom {
+public interface GenreRepository extends MongoRepository<Genre, String> {
 
     Optional<Genre> findGenreByGenreTitle(String genreTitle);
-
-    boolean existsByGenreTitleEqualsIgnoreCase(String genreTitle);
 }

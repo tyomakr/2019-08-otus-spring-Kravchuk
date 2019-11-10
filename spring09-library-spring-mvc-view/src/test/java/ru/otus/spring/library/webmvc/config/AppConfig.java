@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class AppConfig {
 
-    private static final String CHANGELOGS_PACKAGE = "ru.otus.spring.library.webmvc.config.changelog";
-    private static final String DB_NAME = "libmongo";
+    private static final String CHANGELOGS_PACKAGE = "ru.otus.spring.library.webmvc.config.changelogtest";
+    private static final String DB_NAME = "libmongotest";
     private final ApplicationContext springContext;
     private final MongoClient mongoClient;
 
