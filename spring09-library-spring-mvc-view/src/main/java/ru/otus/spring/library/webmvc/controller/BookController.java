@@ -24,9 +24,8 @@ public class BookController {
     @GetMapping("/books")
     public String getBooksListPage(Model model) {
         model.addAttribute("bookList", bs.findAll());
-        model.addAttribute("view", "pages/books");
         model.addAttribute("pageTitle", msgService.getMsg("bl.page.header"));
-        return "base-layout";
+        return "pages/books";
     }
 
     @PostMapping(value = "/books/create")
@@ -39,17 +38,16 @@ public class BookController {
 
 
     @GetMapping("/books/edit")
-    public String editBook(@RequestParam("id") String bookId, Model model) {
+    public String getEditBookPage(@RequestParam("id") String bookId, Model model) {
         Optional<Book> optionalBook = bs.findById(bookId);
         optionalBook.ifPresent(book -> {
             model.addAttribute("pageTitle", msgService.getMsg("eb.page.header"));
-            model.addAttribute("view", "pages/edit-book");
             model.addAttribute("availableAuthorsList", as.findAll().stream().filter(author -> !book.getAuthors().contains(author)).collect(Collectors.toList()));
             model.addAttribute("availableGenresList", gs.findAll().stream().filter(genre -> !book.getGenres().contains(genre)).collect(Collectors.toList()));
             model.addAttribute("bookCommentsList", cs.findAllCommentsByBookId(bookId));
             model.addAttribute(book);
         });
-        return "base-layout";
+        return "pages/edit-book";
     }
 
 

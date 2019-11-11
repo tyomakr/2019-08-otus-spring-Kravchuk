@@ -18,8 +18,7 @@ public class AuthorController {
     @GetMapping("/authors")
     public String getAuthorsListPage(Model model) {
         model.addAttribute("authorList", as.findAll());
-        model.addAttribute("view", "pages/authors");
         model.addAttribute("pageTitle", msgService.getMsg("al.page.header"));
-        return "base-layout";
+        return "pages/authors";
     }
 }

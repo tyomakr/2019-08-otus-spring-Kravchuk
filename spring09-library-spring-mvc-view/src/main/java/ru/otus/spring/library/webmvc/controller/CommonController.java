@@ -11,8 +11,7 @@ public class CommonController {
 
     @GetMapping("/")
     public String getIndexPage(Model model) {
-        model.addAttribute("view", "home/index");
         model.addAttribute("pageTitle", "Spring Online Library");
-        return "base-layout";
+        return "home/index";
     }
 }

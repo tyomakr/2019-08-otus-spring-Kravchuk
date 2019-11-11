@@ -12,11 +12,10 @@ public class WebErrorController implements ErrorController {
 
     @GetMapping("/error")
     public String handleError(Model model, HttpServletResponse response) {
-        model.addAttribute("view", "pages/error");
         model.addAttribute("pageTitle", "ERROR PAGE");
         model.addAttribute("errStatus", response.getStatus());
 
-        return "base-layout";
+        return "pages/error";
     }
 
 

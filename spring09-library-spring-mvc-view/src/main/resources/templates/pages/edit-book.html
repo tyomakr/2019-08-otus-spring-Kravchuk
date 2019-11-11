@@ -1,110 +1,148 @@
-<main role="main" class="container" xmlns:th="http://www.w3.org/1999/xhtml">
-    <nav>
-        <h1 class="mt-5" th:text="#{eb.page.title}">Редактировать книгу</h1>
+<!DOCTYPE HTML>
+<html lang="ru" th:lang="${lang}" th:with="lang=${#locale.language}" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head">
+</head>
 
-        <!-- UPDATE BOOK TITLE SECTION BEGIN -->
-        <div class="container">
+<body>
+
+<header th:include="fragments/header"></header>
+
+<div class="container">
+    <main class="container" role="main" xmlns:th="http://www.w3.org/1999/xhtml">
+        <nav>
+            <h1 class="mt-5" th:text="#{eb.page.title}">Редактировать книгу</h1>
+
+            <!-- UPDATE BOOK TITLE SECTION BEGIN -->
             <div class="container">
-                <form action="/books/edit/title" id="edit-title" th:action="@{/books/edit/title}" th:method="post" th:object="${book}">
+                <div class="container">
+                    <form action="/books/edit/title" id="edit-title" th:action="@{/books/edit/title}" th:method="post"
+                          th:object="${book}">
 
-                    <div class="form-group input-group mt-3">
-                        <label class="col-sm-2 col-form-label" for="id" th:text="#{eb.book.id}">ID book</label>
-                        <div class="col-sm-10">
-                            <input class="form-control-plaintext" type="text" id="id" name="id" readonly th:value="${book.id}" value="id">
+                        <div class="form-group input-group mt-3">
+                            <label class="col-sm-2 col-form-label" for="id" th:text="#{eb.book.id}">ID book</label>
+                            <div class="col-sm-10">
+                                <input class="form-control-plaintext" id="id" name="id" readonly th:value="${book.id}"
+                                       type="text" value="id">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="input-group-append mt-3 mb-3">
-                        <label class="col-sm-2 col-form-label" for="title" th:text="#{eb.book.title}">Book title</label>
-                        <input class="form-control" type="text" id="title" name="title" th:name="title" th:value="${book.title}" value="title" required>
+                        <div class="input-group-append mt-3 mb-3">
+                            <label class="col-sm-2 col-form-label" for="title" th:text="#{eb.book.title}">Book
+                                title</label>
+                            <input class="form-control" id="title" name="title" required th:name="title"
+                                   th:value="${book.title}" type="text" value="title">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" th:text="#{eb.btn.change}" type="submit">
+                                    change
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- UPDATE BOOK TITLE SECTION END -->
+            <!-- LIST BOOK AUTHORS DELETE SECTION BEGIN -->
+            <div class="container">
+                <div class="container" th:each="author : ${book.authors}">
+                    <form method="post"
+                          th:action="@{/books/edit/{book_id}/author/delete/{author_id} (book_id=${book.id}, author_id=${author.id})}">
+
+                        <div class="input-group-append mt-3 mb-3">
+                            <label class="col-sm-2 col-form-label" th:for="${author.authorName}"
+                                   th:text="#{eb.book.author}">Author Name</label>
+                            <input class="form-control" readonly th:id="${author.authorName}" th:name="author"
+                                   th:value="${author.authorName}" type="text">
+                            <div class="input-group-append" th:if="${#lists.size(book.authors) > 1}">
+                                <button class="btn btn-outline-danger" th:text="#{eb.btn.remove}" type="submit">Remove
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- LIST BOOK AUTHORS DELETE SECTION END -->
+            <!-- LIST BOOK GENRES DELETE SECTION BEGIN -->
+            <div class="container">
+                <div class="container" th:each="genre : ${book.genres}">
+                    <form method="post"
+                          th:action="@{/books/edit/{book_id}/genre/delete/{genre_id} (book_id=${book.id}, genre_id=${genre.id})}">
+
+                        <div class="input-group-append mt-3 mb-3">
+                            <label class="col-sm-2 col-form-label" th:for="${genre.genreTitle}"
+                                   th:text="#{eb.book.genre}">Genre Title</label>
+                            <input class="form-control" readonly th:id="${genre.genreTitle}" th:name="genre"
+                                   th:value="${genre.genreTitle}" type="text">
+                            <div class="input-group-append" th:if="${#lists.size(book.genres) > 1}">
+                                <button class="btn btn-outline-danger" th:text="#{eb.btn.remove}" type="submit">Remove
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- LIST BOOK GENRES DELETE SECTION END -->
+
+            <hr/>
+            <div class="container">
+                <h6 th:text="#{eb.header.add.au.gn}">Additional parameters</h6>
+                <!-- LIST AUTHORS ADD BEGIN -->
+                <form method="post" th:action="@{/books/edit/{id}/author/add (id=${book.id})}">
+                    <div class="input-group my-sm-3 mt-2 pt-2">
+                        <select class="custom-select" id="author" name="authorId">
+                            <option selected th:text="#{eb.av.authors.choose}">Choose...</option>
+                            <option th:each="author, a : ${availableAuthorsList}" th:text="${author.authorName}"
+                                    th:value="${author.id}">Author
+                            </option>
+                        </select>
                         <div class="input-group-append">
-                            <button class="btn btn-outline-primary" type="submit" th:text="#{eb.btn.change}">change</button>
+                            <button class="btn btn-outline-secondary" th:text="#{eb.btn.add}" type="submit">Add author
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <!-- LIST AUTHORS ADD END -->
+                <!-- LIST GENRES ADD BEGIN -->
+                <form method="post" th:action="@{/books/edit/{id}/genre/add (id=${book.id})}">
+                    <div class="input-group my-sm-3 mt-2 pt-2">
+                        <select class="custom-select" id="genre" name="genreId">
+                            <option selected th:text="#{eb.av.genres.choose}">Choose...</option>
+                            <option th:each="genre, g : ${availableGenresList}" th:text="${genre.genreTitle}"
+                                    th:value="${genre.id}">Genre
+                            </option>
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" th:text="#{eb.btn.add}" type="submit">Add genre
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
-        </div>
-        <!-- UPDATE BOOK TITLE SECTION END -->
-        <!-- LIST BOOK AUTHORS DELETE SECTION BEGIN -->
-        <div class="container">
-            <div class="container" th:each="author : ${book.authors}">
-                <form method="post" th:action="@{/books/edit/{book_id}/author/delete/{author_id} (book_id=${book.id}, author_id=${author.id})}">
+            <!-- LIST GENRES ADD END -->
+            <hr/>
+            <!-- LIST COMMENTS BEGIN -->
+            <div class="container mt-5 mb-5">
+                <h6 th:text="#{eb.header.comments}">Comments</h6>
+                <div th:each="comment, c: ${bookCommentsList}">
+                    <div class="container mt-2 mb-2 pt-2 border-top" th:text="${comment.commentText}">commentText</div>
 
-                    <div class="input-group-append mt-3 mb-3">
-                        <label class="col-sm-2 col-form-label" th:for="${author.authorName}" th:text="#{eb.book.author}">Author Name</label>
-                        <input class="form-control" type="text" th:id="${author.authorName}" th:name="author" th:value="${author.authorName}" readonly>
-                        <div class="input-group-append" th:if="${#lists.size(book.authors) > 1}">
-                            <button class="btn btn-outline-danger" type="submit" th:text="#{eb.btn.remove}">Remove</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!-- LIST BOOK AUTHORS DELETE SECTION END -->
-        <!-- LIST BOOK GENRES DELETE SECTION BEGIN -->
-        <div class="container">
-            <div class="container" th:each="genre : ${book.genres}">
-                <form method="post" th:action="@{/books/edit/{book_id}/genre/delete/{genre_id} (book_id=${book.id}, genre_id=${genre.id})}">
-
-                    <div class="input-group-append mt-3 mb-3">
-                        <label class="col-sm-2 col-form-label" th:for="${genre.genreTitle}" th:text="#{eb.book.genre}">Genre Title</label>
-                        <input class="form-control" type="text" th:id="${genre.genreTitle}" th:name="genre" th:value="${genre.genreTitle}" readonly>
-                        <div class="input-group-append" th:if="${#lists.size(book.genres) > 1}">
-                            <button class="btn btn-outline-danger" type="submit" th:text="#{eb.btn.remove}">Remove</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!-- LIST BOOK GENRES DELETE SECTION END -->
-
-        <hr/>
-        <div class="container">
-            <h6 th:text="#{eb.header.add.au.gn}">Additional parameters</h6>
-            <!-- LIST AUTHORS ADD BEGIN -->
-            <form method="post" th:action="@{/books/edit/{id}/author/add (id=${book.id})}">
-                <div class="input-group my-sm-3 mt-2 pt-2">
-                    <select class="custom-select" id="author" name="authorId">
-                        <option selected th:text="#{eb.av.authors.choose}">Choose...</option>
-                        <option th:each="author, a : ${availableAuthorsList}" th:text="${author.authorName}" th:value="${author.id}">Author</option>
-                    </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="submit" th:text="#{eb.btn.add}">Add author</button>
-                    </div>
-                </div>
-            </form>
-            <!-- LIST AUTHORS ADD END -->
-            <!-- LIST GENRES ADD BEGIN -->
-            <form method="post" th:action="@{/books/edit/{id}/genre/add (id=${book.id})}">
-            <div class="input-group my-sm-3 mt-2 pt-2">
-                <select class="custom-select" id="genre" name="genreId">
-                    <option selected th:text="#{eb.av.genres.choose}">Choose...</option>
-                    <option th:each="genre, g : ${availableGenresList}" th:text="${genre.genreTitle}" th:value="${genre.id}">Genre</option>
-                </select>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit" th:text="#{eb.btn.add}">Add genre</button>
                 </div>
             </div>
-            </form>
-        </div>
-        <!-- LIST GENRES ADD END -->
-        <hr/>
-        <!-- LIST COMMENTS BEGIN -->
-        <div class="container mt-5 mb-5">
-            <h6 th:text="#{eb.header.comments}">Comments</h6>
-            <div th:each="comment, c: ${bookCommentsList}">
-                <div class="container mt-2 mb-2 pt-2 border-top" th:text="${comment.commentText}">commentText</div>
-
+            <!-- LIST COMMENTS END -->
+            <hr/>
+            <!-- DELETE BOOK BUTTON BEGIN -->
+            <div class="container mt-5 mb-5 float-right">
+                <form method="post" th:action="@{/books/remove/{id} (id=${book.id})}">
+                    <button class="btn btn-outline-danger" th:text="#{eb.btn.delete}" type="submit">DELETE BOOK</button>
+                </form>
             </div>
-        </div>
-        <!-- LIST COMMENTS END -->
-        <hr/>
-        <!-- DELETE BOOK BUTTON BEGIN -->
-        <div class="container mt-5 mb-5 float-right">
-            <form method="post" th:action="@{/books/remove/{id} (id=${book.id})}">
-                <button class="btn btn-outline-danger" type="submit" th:text="#{eb.btn.delete}">DELETE BOOK</button>
-            </form>
-        </div>
-        <!-- DELETE BOOK BUTTON END -->
-    </nav>
-</main>
+            <!-- DELETE BOOK BUTTON END -->
+        </nav>
+    </main>
+</div>
+
+<footer th:include="fragments/footer"></footer>
+
+
+</body>
+</html>

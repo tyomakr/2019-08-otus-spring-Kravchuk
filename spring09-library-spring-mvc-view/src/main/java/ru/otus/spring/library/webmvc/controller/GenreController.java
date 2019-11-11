@@ -17,8 +17,7 @@ public class GenreController {
     @GetMapping("/genres")
     public String getGenresListPage(Model model) {
         model.addAttribute("genreList", gs.findAll());
-        model.addAttribute("view", "pages/genres");
         model.addAttribute("pageTitle", msgService.getMsg("gl.page.header"));
-        return "base-layout";
+        return "pages/genres";
     }
 }

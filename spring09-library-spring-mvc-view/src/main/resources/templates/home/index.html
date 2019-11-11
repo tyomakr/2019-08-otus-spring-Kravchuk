@@ -1,12 +1,29 @@
-<main role="main" class="container">
-        <h1 class="mt-5">Spring Library</h1>
-        <span class="lead">Онлайн библиотека на SpringBoot</span>
-        <nav>
-                <span><b>CRUD приложение с Web UI и хранением данных в БД</b></span>
-                <ul>
-                        <li>Создайте приложение с хранением сущностей в БД (можно взять DAOs из прошлых занятий)</li>
-                        <li>Использовать классический View, предусмотреть страницу отображения всех сущностей и создания/редактирования.</li>
-                        <li>View на Thymeleaf, classic Controllers</li>
-                </ul>
-        </nav>
-</main>
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:include="fragments/head">
+</head>
+
+<body>
+
+<header th:include="fragments/header"></header>
+
+<div class="container">
+        <main role="main" class="container">
+                <h1 class="mt-5">Spring Library</h1>
+                <span class="lead">Онлайн библиотека на SpringBoot</span>
+                <nav>
+                        <span><b>CRUD приложение с Web UI и хранением данных в БД</b></span>
+                        <ul>
+                                <li>Создайте приложение с хранением сущностей в БД (можно взять DAOs из прошлых занятий)</li>
+                                <li>Использовать классический View, предусмотреть страницу отображения всех сущностей и создания/редактирования.</li>
+                                <li>View на Thymeleaf, classic Controllers</li>
+                        </ul>
+                </nav>
+        </main>
+</div>
+
+<footer th:include="fragments/footer"></footer>
+
+
+</body>
+</html>
