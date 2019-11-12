@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:include="fragments/head">
+</head>
+
+<body>
+
+<header th:include="fragments/header"></header>
+
+<div class="container">
+    <main role="main" class="container" xmlns:th="http://www.w3.org/1999/xhtml">
+        <nav>
+            <h1 class="mt-5" th:text="#{w.main.menu.genres}">Genres</h1>
+
+            <table class="table">
+                <thead>
+                <th scope="col" th:text="#{gl.genre.id}">Genre ID</th>
+                <th scope="col" th:text="#{gl.genre.title}">Genre Title</th>
+                </thead>
+                <tbody>
+                <tr th:each="genre : ${genreList}">
+                    <td th:text="${genre.id}">id</td>
+                    <td th:text="${genre.genreTitle}">title</td>
+                </tr>
+                </tbody>
+            </table>
+        </nav>
+    </main>
+</div>
+
+<footer th:include="fragments/footer"></footer>
+
+
+</body>
+</html>
