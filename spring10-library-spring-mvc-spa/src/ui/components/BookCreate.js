@@ -2,7 +2,6 @@ import React from 'react'
 import {Helmet} from "react-helmet/es/Helmet";
 import axios from 'axios'
 import {Header} from "./Header";
-import {Redirect} from "react-router";
 
 
 function getDefaultState() {
@@ -14,7 +13,7 @@ function getDefaultState() {
 }
 
 
-class BookCreate extends React.Component {
+export default class BookCreate extends React.Component {
 
     constructor(){
         super()
@@ -77,7 +76,6 @@ class BookCreate extends React.Component {
     }
 
 
-
     render() {
 
         return (
@@ -97,17 +95,17 @@ class BookCreate extends React.Component {
                     <form onSubmit={this.postData.bind(this)}>
                         <div className="form-group">
                             <input className="form-control" type="text" name="title" aria-describedby="titleHelp"
-                                   value={this.state.title} onChange={this.dataChange.bind(this)} required />
+                                   value={this.props.title} onChange={this.dataChange.bind(this)} required />
                                 <small className="form-text text-muted" id="titleHelp">Пожалуйста введите название книги</small>
                         </div>
                         <div className="form-group">
                             <input className="form-control" type="text" name="authors" aria-describedby="authorHelp"
-                                   value={this.state.authors} onChange={this.dataChange.bind(this)} required />
+                                   value={this.props.authors} onChange={this.dataChange.bind(this)} required />
                                 <small className="form-text text-muted" id="authorHelp">Пожалуйста введите имя одного автора</small>
                         </div>
                         <div className="form-group">
                         <input className="form-control" type="text" name="genres" aria-describedby="genreHelp"
-                               value={this.state.genres} onChange={this.dataChange.bind(this)} required />
+                               value={this.props.genres} onChange={this.dataChange.bind(this)} required />
                                 <small className="form-text text-muted" id="genreHelp">Пожалуйста введите название одного жанра</small>
                         </div>
                         <div className="float-right my-sm 1">
@@ -120,5 +118,3 @@ class BookCreate extends React.Component {
         )
     }
 }
-
-export default BookCreate;

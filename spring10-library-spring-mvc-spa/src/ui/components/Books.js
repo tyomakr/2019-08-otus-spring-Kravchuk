@@ -50,7 +50,8 @@ export default class Books extends React.Component {
                         {
                             this.state.books.map((book, i) => (
                                 <tr key={i}>
-                                    <td>{book.title}</td>
+                                    <td><Link to={`/Books/edit/${book.id}`}>{book.title}</Link></td>
+
                                     <td>{book.authors}</td>
                                     <td>{book.genres}</td>
                                 </tr>
@@ -64,3 +65,4 @@ export default class Books extends React.Component {
         )
     }
 }
+

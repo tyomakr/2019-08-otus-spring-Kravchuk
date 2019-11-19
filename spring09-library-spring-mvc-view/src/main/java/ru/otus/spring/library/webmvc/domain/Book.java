@@ -56,4 +56,6 @@ public class Book {
     public String genresToString() {
         return genres.stream().map(Genre::getGenreTitle).collect(Collectors.joining(" / "));
     }
+
+
 }
