@@ -1,19 +1,34 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {Helmet} from "react-helmet/es/Helmet";
-import {Header} from "./Header";
+import {Header} from "../fragments/Header";
 import {Link} from "react-router-dom";
 
 export default class Books extends React.Component {
 
-    constructor() {
-        super();
-        this.state = {books: []};
+    constructor(props) {
+        super(props);
+        this.state = {books: [], authors: [], genres: []};
+
+        this.editBook = this.editBook.bind(this);
+        this.reloadBooksList = this.reloadBooksList.bind(this);
     }
 
+
     componentDidMount() {
+        this.reloadBooksList();
+    }
+
+
+    reloadBooksList() {
         fetch('/api/v1/books')
             .then(response => response.json())
             .then(books => this.setState({books}));
+    }
+
+
+    editBook(id) {
+        window.localStorage.setItem("id", id);
+        this.props.history.push('/Books/BookUpdate');
     }
 
     render() {
@@ -44,18 +59,21 @@ export default class Books extends React.Component {
                             <th>Название книги</th>
                             <th>Автор</th>
                             <th>Жанр</th>
+                            <th>act</th>
                         </tr>
                         </thead>
                         <tbody>
                         {
-                            this.state.books.map((book, i) => (
-                                <tr key={i}>
-                                    <td><Link to={`/Books/edit/${book.id}`}>{book.title}</Link></td>
-
+                            this.state.books.map(book =>
+                                <tr key={book.id}>
+                                    <td>{book.title}</td>
                                     <td>{book.authors}</td>
                                     <td>{book.genres}</td>
+                                    <td>
+                                        <button className="btn btn-success" onClick={() => this.editBook(book.id)}> Edit</button>
+                                    </td>
                                 </tr>
-                            ))
+                            )
                         }
                         </tbody>
                     </table>
@@ -65,4 +83,3 @@ export default class Books extends React.Component {
         )
     }
 }
-

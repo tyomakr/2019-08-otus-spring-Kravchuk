@@ -1,7 +1,7 @@
 import React from 'react'
 import {Helmet} from "react-helmet/es/Helmet";
 import axios from 'axios'
-import {Header} from "./Header";
+import {Header} from "../fragments/Header";
 
 
 function getDefaultState() {
@@ -48,7 +48,7 @@ export default class BookCreate extends React.Component {
             genres
         };
 
-        axios.post('http://localhost:8888/api/v1/books/create', data)
+        axios.post('/api/v1/books/create', data)
             .then(response => {
                 console.log(response)
                 this.setState({

@@ -1,15 +1,18 @@
-import React from 'react'
+import React from 'react';
+import './css/style.css';
 import {Helmet} from "react-helmet/es/Helmet";
-import {Header} from "./Header";
+import {Header} from "./fragments/Header";
+
 
 export default class App extends React.Component {
 
     render() {
+
         return (
             <React.Fragment>
                 <div className={App}>
                     <Helmet>
-                        <meta charSet="utf-8" />
+                        <meta charSet="utf-8"/>
                         <title>React Spring Library - Главная страница</title>
                     </Helmet>
                 </div>
@@ -26,4 +29,6 @@ export default class App extends React.Component {
             </React.Fragment>
         )
     }
+
 }
+

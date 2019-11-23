@@ -1,6 +1,6 @@
 import React from 'react'
 import {Helmet} from "react-helmet/es/Helmet";
-import {Header} from "./Header";
+import {Header} from "../fragments/Header";
 
 
 

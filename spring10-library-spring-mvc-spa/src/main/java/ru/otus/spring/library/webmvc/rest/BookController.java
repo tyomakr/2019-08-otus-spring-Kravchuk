@@ -1,8 +1,8 @@
 package ru.otus.spring.library.webmvc.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.library.webmvc.domain.Book;
 import ru.otus.spring.library.webmvc.mapper.BookMapper;
@@ -13,7 +13,6 @@ import ru.otus.spring.library.webmvc.service.GenreService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,9 +35,15 @@ public class BookController {
         bookService.insertBook(bookDto.getTitle(), bookDto.getAuthors(), bookDto.getGenres());
     }
 
-    @PutMapping("/books/update{id}")
-    public void updateBook(@PathVariable("id") String id, @RequestBody BookDto bookDto) {
+    @GetMapping("/books/{id}")
+    public ResponseEntity<Book> getBookById(@PathVariable("id") String id) {
+        Optional<Book> optionalBook = bookService.findById(id);
+        return optionalBook.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
 
+    @PutMapping("/books/update/{id}")
+    public void updateBook(@PathVariable("id") String id, @RequestBody Book book) {
+        bookService.updateBookTitle(book);
     }
 
 //    @GetMapping("/books/edit")
