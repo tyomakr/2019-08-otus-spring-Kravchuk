@@ -43,7 +43,7 @@ public class BookController {
 
     @PutMapping("/books/update/{id}")
     public void updateBook(@PathVariable("id") String id, @RequestBody Book book) {
-        bookService.updateBookTitle(book);
+        bookService.updateBook(book);
     }
 
 //    @GetMapping("/books/edit")

@@ -40,14 +40,6 @@ export default class BookUpdate extends React.Component {
     }
 
 
-    //onChange
-    handleChange(e) {
-        e.preventDefault();
-        this.setState({[e.target.name] : e.target.value });
-        console.log(e)
-    }
-
-
     //сохранить книгу
     saveBook(e) {
         console.log(this.state.authors);
@@ -78,14 +70,42 @@ export default class BookUpdate extends React.Component {
     }
 
 
-    handleAuthorChange(e) {
-
-    }
-
-    handleGenreChange(field, name, e) {
+    //onChange поля название книги
+    handleChange(e) {
         e.preventDefault();
         this.setState({[e.target.name] : e.target.value });
-        console.log(e)
+    }
+
+
+    //изменение поля автора
+    handleAuthorChange(id, event) {
+        const index = this.state.authors.findIndex((author) => {
+            return (author.id === id);
+        });
+
+        const author = Object.assign({}, this.state.authors[index]);
+        author.authorName = event.target.value;
+
+        const authors = Object.assign([], this.state.authors);
+        authors[index] = author;
+
+        this.setState({authors:authors});
+    }
+
+
+    //изменение поля жанра
+    handleGenreChange(id, event) {
+        const index = this.state.genres.findIndex((genre) => {
+            return (genre.id === id);
+        });
+
+        const genre = Object.assign({}, this.state.genres[index]);
+        genre.genreTitle = event.target.value;
+
+        const genres = Object.assign([], this.state.genres);
+        genres[index] = genre;
+
+        this.setState({genres:genres});
     }
 
 
@@ -122,56 +142,37 @@ export default class BookUpdate extends React.Component {
                             this.state.authors.map(author =>
                                 <div key={author.id} className="input-group-append mt-3 mb-3">
                                     <label className="col-sm-2 col-form-label">Автор</label>
-                                    <input className="form-control" id={author.authorName} name={author.authorName}
-                                           defaultValue={author.authorName} onChange={event => this.setState({authorName : event.target.value})}/>
+                                    <input className="form-control" id={author.id} name={author.id}
+                                           defaultValue={author.authorName} onChange={this.handleAuthorChange.bind(this, author.id)}/>
                                     {
                                         this.showDeleteAuthorButton() &&
 
                                         <div className="input-group-append">
-                                            <button className="btn btn-outline-danger">remove</button>
+                                            <button className="btn btn-outline-danger">Удалить</button>
                                         </div>
                                     }
                                 </div>
                             )
                         }
                         {
-                            Object.keys(this.state.genres).map( (genre, i) =>
-                            <div key={i} className="input-group-append mt-3 mb-3">
+                            this.state.genres.map( genre =>
+                            <div key={genre.id} className="input-group-append mt-3 mb-3">
                                 <label className="col-sm-2 col-form-label">Жанр</label>
 
-                                <input className="form-control" id={i} name={i}
-                                       defaultValue={genre.genreTitle} onChange={this.handleGenreChange.bind(this, genre.title)}/>
-
+                                <input className="form-control" id={genre.id} name={genre.id}
+                                       defaultValue={genre.genreTitle} onChange={this.handleGenreChange.bind(this, genre.id)}/>
                                 {
                                     this.showDeleteGenreButton() &&
 
                                     <div className="input-group-append">
-                                        <button className="btn btn-outline-danger">remove</button>
+                                        <button className="btn btn-outline-danger">Удалить</button>
                                     </div>
                                 }
                             </div>
                             )
-
-
-                            // this.state.genres.map( genre =>
-                            // <div key={genre.id} className="input-group-append mt-3 mb-3">
-                            //     <label className="col-sm-2 col-form-label">Жанр</label>
-                            //
-                            //     <input className="form-control" id={genre.id} name={genre.id}
-                            //            defaultValue={genre.genreTitle} onChange={this.handleGenreChange.bind(this, genre.title)}/>
-                            //
-                            //     {
-                            //         this.showDeleteGenreButton() &&
-                            //
-                            //         <div className="input-group-append">
-                            //             <button className="btn btn-outline-danger">remove</button>
-                            //         </div>
-                            //     }
-                            // </div>
-                            // )
                         }
 
-                        <button className="btn btn-success" onClick={this.saveBook}>Save</button>
+                        <button className="btn btn-success" onClick={this.saveBook}>Сохранить изменения</button>
                     </form>
                 </div>
             </React.Fragment>

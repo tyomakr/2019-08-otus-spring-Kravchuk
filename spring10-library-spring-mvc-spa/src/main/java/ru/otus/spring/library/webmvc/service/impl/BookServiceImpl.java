@@ -44,8 +44,21 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public void updateBookTitle(Book book) {
-        bookRepository.save(book);
+    public void updateBook(Book book) {
+
+        List<Author> al = new ArrayList<>();
+        List<Genre> gl = new ArrayList<>();
+
+        for(Author author : book.getAuthors()) {
+            author = authorService.findOrCreateAuthor(author.getAuthorName());
+            al.add(author);
+        }
+        for(Genre genre : book.getGenres()) {
+            genre = genreService.findOrCreateGenre(genre.getGenreTitle());
+            gl.add(genre);
+        }
+
+        bookRepository.save(new Book(book.getId(), book.getTitle(), al, gl));
     }
 
 
