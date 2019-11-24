@@ -13,7 +13,7 @@ public interface BookService {
 
     Book insertBook(String bookTitle, String bookAuthor, String bookGenre);
 
-    void updateBook(Book book);
+    Book updateBook(Book book);
 
     void addBookAuthor(String bookId, String bookAuthor);
 

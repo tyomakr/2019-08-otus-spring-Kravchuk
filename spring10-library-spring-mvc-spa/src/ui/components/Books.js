@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Helmet} from "react-helmet/es/Helmet";
 import {Header} from "../fragments/Header";
 import {Link} from "react-router-dom";
+import ApiService from "../service/ApiService";
 
 export default class Books extends React.Component {
 
@@ -20,7 +21,7 @@ export default class Books extends React.Component {
 
 
     reloadBooksList() {
-        fetch('/api/v1/books')
+        ApiService.fetchAllBooks()
             .then(response => response.json())
             .then(books => this.setState({books}));
     }

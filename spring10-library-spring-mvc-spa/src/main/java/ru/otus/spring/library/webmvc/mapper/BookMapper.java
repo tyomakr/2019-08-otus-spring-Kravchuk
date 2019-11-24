@@ -7,9 +7,5 @@ import java.util.List;
 
 public interface BookMapper {
 
-    Book dtoToBook (BookDto bookDto);
-
-    BookDto bookDtoToDomain(Book book);
-
     List<BookDto> domainToDto(List<Book> book);
 }

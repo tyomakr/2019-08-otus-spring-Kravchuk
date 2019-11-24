@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.library.webmvc.domain.Book;
 import ru.otus.spring.library.webmvc.mapper.BookMapper;
 import ru.otus.spring.library.webmvc.rest.dto.BookDto;
+import ru.otus.spring.library.webmvc.rest.resp.ApiResponse;
 import ru.otus.spring.library.webmvc.service.AuthorService;
 import ru.otus.spring.library.webmvc.service.BookService;
 import ru.otus.spring.library.webmvc.service.GenreService;
@@ -20,8 +21,6 @@ import java.util.Optional;
 public class BookController {
 
     private final BookService bookService;
-    private final AuthorService authorService;
-    private final GenreService genreService;
     private final BookMapper bookMapper;
 
     @GetMapping("/books")
@@ -31,31 +30,23 @@ public class BookController {
 
 
     @PostMapping(value = "/books/create")
-    public void createBook(@RequestBody BookDto bookDto) {
-        bookService.insertBook(bookDto.getTitle(), bookDto.getAuthors(), bookDto.getGenres());
+    public ApiResponse<Book> createBook(@RequestBody BookDto bookDto) {
+        return new ApiResponse<>(HttpStatus.OK.value(),
+                bookService.insertBook(bookDto.getTitle(), bookDto.getAuthors(), bookDto.getGenres()));
     }
+
 
     @GetMapping("/books/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable("id") String id) {
+    public ApiResponse<Book> getBookById(@PathVariable("id") String id) {
         Optional<Book> optionalBook = bookService.findById(id);
-        return optionalBook.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+
+        return new ApiResponse<>(HttpStatus.OK.value(),
+                optionalBook.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
 
-    @PutMapping("/books/update/{id}")
-    public void updateBook(@PathVariable("id") String id, @RequestBody Book book) {
-        bookService.updateBook(book);
+
+    @PutMapping("/books/update/")
+    public ApiResponse<Book> updateBook(@RequestBody Book book) {
+        return new ApiResponse<>(HttpStatus.OK.value(), bookService.updateBook(book));
     }
-
-//    @GetMapping("/books/edit")
-//    public void editBook(@RequestParam("id") String bookId, Model model) {
-//        Optional<Book> optionalBook = bookService.findById(bookId);
-//        optionalBook.ifPresent(book -> {
-//
-//            model.addAttribute("availableAuthorsList", authorService.findAll().stream().filter(author -> !book.getAuthors().contains(author)).collect(Collectors.toList()));
-//            model.addAttribute("availableGenresList", genreService.findAll().stream().filter(genre -> !book.getGenres().contains(genre)).collect(Collectors.toList()));
-////            model.addAttribute("bookCommentsList", cs.findAllCommentsByBookId(bookId));
-//            model.addAttribute(book);
-//        });
-//    }
-
 }

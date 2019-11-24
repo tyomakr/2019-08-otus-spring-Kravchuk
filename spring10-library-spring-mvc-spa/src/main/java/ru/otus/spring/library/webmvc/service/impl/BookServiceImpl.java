@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public void updateBook(Book book) {
+    public Book updateBook(Book book) {
 
         List<Author> al = new ArrayList<>();
         List<Genre> gl = new ArrayList<>();
@@ -58,7 +58,7 @@ public class BookServiceImpl implements BookService {
             gl.add(genre);
         }
 
-        bookRepository.save(new Book(book.getId(), book.getTitle(), al, gl));
+        return bookRepository.save(new Book(book.getId(), book.getTitle(), al, gl));
     }
 
 

@@ -18,20 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookMapperImpl implements BookMapper{
 
-    private final AuthorService authorService;
-    private final GenreService genreService;
-
-
-    @Override
-    public Book dtoToBook(BookDto bookDto) {
-        return new Book(bookDto.getTitle(), Collections.singletonList(authorService.findOrCreateAuthor(bookDto.getAuthors())), Collections.singletonList(genreService.findOrCreateGenre(bookDto.getGenres())));
-    }
-
-    @Override
-    public BookDto bookDtoToDomain(Book book) {
-        return new BookDto(book.getId(), book.getTitle(), authorsToString(book.getAuthors()), genresToString(book.getGenres()));
-    }
-
     @Override
     public List<BookDto> domainToDto(List<Book> books) {
         List<BookDto> booksDto = new ArrayList<>();

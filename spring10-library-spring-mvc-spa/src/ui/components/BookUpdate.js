@@ -1,7 +1,7 @@
 import React from 'react'
 import {Helmet} from "react-helmet/es/Helmet";
 import {Header} from "../fragments/Header";
-import axios from "axios";
+import ApiService from "../service/ApiService";
 
 export default class BookUpdate extends React.Component {
 
@@ -25,11 +25,12 @@ export default class BookUpdate extends React.Component {
         this.getBook();
     }
 
+
     //Получение книг по rest
     getBook() {
-        axios.get('/api/v1/books/' + window.localStorage.getItem("id"))
+        ApiService.fetchBook("id")
             .then((res) => {
-                let book = res.data;
+                let book = res.data.result.body;
                 this.setState({
                     id: book.id,
                     title: book.title,
@@ -42,7 +43,6 @@ export default class BookUpdate extends React.Component {
 
     //сохранить книгу
     saveBook(e) {
-        console.log(this.state.authors);
         e.preventDefault();
         let book = {
             id: this.state.id,
@@ -50,10 +50,10 @@ export default class BookUpdate extends React.Component {
             authors: this.state.authors,
             genres: this.state.genres
         };
-        console.log(book)
-        axios.put('/api/v1/books/update/' + book.id, book);
-
-        this.getBook();
+        ApiService.saveBook(book)
+            .then(response =>{
+                this.props.history.push('/Books');
+            });
     }
 
 
@@ -108,6 +108,34 @@ export default class BookUpdate extends React.Component {
         this.setState({genres:genres});
     }
 
+    //кнопка удаления автора
+    handleAuthorDelete(id) {
+
+        const index = this.state.authors.findIndex((author) => {
+            return (author.id === id);
+        });
+
+        const authors = Object.assign([], this.state.authors);
+        if (index !== -1) {
+            authors.splice(index, 1);
+        }
+        this.setState({authors:authors});
+    }
+
+    //кнопка удаления жанра
+    handleGenreDelete(id) {
+
+        const index = this.state.genres.findIndex((genre) => {
+            return (genre.id === id);
+        });
+
+        const genres = Object.assign([], this.state.genres);
+        if (index !== -1) {
+            genres.splice(index, 1);
+        }
+        this.setState({genres:genres});
+    }
+
 
 
     render() {
@@ -148,7 +176,7 @@ export default class BookUpdate extends React.Component {
                                         this.showDeleteAuthorButton() &&
 
                                         <div className="input-group-append">
-                                            <button className="btn btn-outline-danger">Удалить</button>
+                                            <button className="btn btn-outline-danger" onClick={this.handleAuthorDelete.bind(this, author.id)}>Удалить автора</button>
                                         </div>
                                     }
                                 </div>
@@ -165,7 +193,7 @@ export default class BookUpdate extends React.Component {
                                     this.showDeleteGenreButton() &&
 
                                     <div className="input-group-append">
-                                        <button className="btn btn-outline-danger">Удалить</button>
+                                        <button className="btn btn-outline-danger" onClick={this.handleGenreDelete.bind(this, genre.id)}>Удалить жанр</button>
                                     </div>
                                 }
                             </div>
