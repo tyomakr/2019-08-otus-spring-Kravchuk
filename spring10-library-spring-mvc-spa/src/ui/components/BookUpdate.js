@@ -3,6 +3,7 @@ import {Helmet} from "react-helmet/es/Helmet";
 import {Header} from "../fragments/Header";
 import ApiService from "../service/ApiService";
 
+
 export default class BookUpdate extends React.Component {
 
 
@@ -12,17 +13,20 @@ export default class BookUpdate extends React.Component {
             id: '',
             title: '',
             authors: [],
-            genres: []
+            genres: [],
+            showComments: false,
+            commentsList:[]
         };
         this.getBook = this.getBook.bind(this);
-        this.showDeleteAuthorButton = this.showDeleteAuthorButton.bind(this);
-        this.showDeleteGenreButton = this.showDeleteGenreButton.bind(this);
         this.saveBook = this.saveBook.bind(this);
+
+        this.loadComments = this.loadComments.bind(this);
     }
 
 
     componentDidMount() {
         this.getBook();
+        this.loadComments();
     }
 
 
@@ -57,20 +61,36 @@ export default class BookUpdate extends React.Component {
     }
 
 
+    //загрузка комментариев к книге
+    loadComments() {
+        ApiService.fetchCommentsByBook("id")
+            .then((res) => {
+                res.data.result;
+                this.setState({
+                    commentsList : res.data.result
+                })
+            });
+    }
 
-    //показывает кнопку удаления автора, если их больше одного
+
+    //условие показа кнопки удаления автора, если их больше одного
     showDeleteAuthorButton() {
         return this.state.authors.length > 1;
     }
 
 
-    //показывает кнопку удаления жанра, если их больше одного
+    //условие показа кнопки удаления жанра, если их больше одного
     showDeleteGenreButton() {
         return this.state.genres.length > 1;
     }
 
+    //условие показа сообщения, если комментарии отсутствуют
+    showNoCommentsMessage() {
+        return this.state.commentsList.length == 0;
+    }
 
-    //onChange поля название книги
+
+    //изменение поля название книги
     handleChange(e) {
         e.preventDefault();
         this.setState({[e.target.name] : e.target.value });
@@ -108,8 +128,11 @@ export default class BookUpdate extends React.Component {
         this.setState({genres:genres});
     }
 
+
     //кнопка удаления автора
     handleAuthorDelete(id) {
+
+        $('#btnAddAuthor').show();
 
         const index = this.state.authors.findIndex((author) => {
             return (author.id === id);
@@ -122,8 +145,11 @@ export default class BookUpdate extends React.Component {
         this.setState({authors:authors});
     }
 
+
     //кнопка удаления жанра
     handleGenreDelete(id) {
+
+        $('#btnAddGenre').show();
 
         const index = this.state.genres.findIndex((genre) => {
             return (genre.id === id);
@@ -135,6 +161,38 @@ export default class BookUpdate extends React.Component {
         }
         this.setState({genres:genres});
     }
+
+
+    //кнопка добавления автора
+    handleAddAuthor(e) {
+
+        $('#btnAddAuthor').hide();
+
+        const authors = Object.assign([], this.state.authors);
+        authors.splice(authors.length, 0, authors.length);
+
+        this.setState({authors:authors});
+    }
+
+
+    //кнопка добавления жанра
+    handleAddGenre(e) {
+
+        $('#btnAddGenre').hide();
+
+        const genres = Object.assign([], this.state.genres);
+        genres.splice(genres.length, 0, genres.length);
+
+        this.setState({genres:genres});
+    }
+
+
+    //кнопка комментариев
+    toggleShowComments(e) {
+
+        let res = this.state.showComments;
+        this.setState({showComments: !res})
+    };
 
 
 
@@ -154,7 +212,7 @@ export default class BookUpdate extends React.Component {
                     <h2>Редактирование книги</h2>
                 </div>
                 <div className="container mt-3 ml-3">
-                    <form>
+                    <form noValidate={true} onSubmit={this.saveBook.bind(this)}>
                         <div className="form-group input-group mt-3">
                             <label className="col-sm-2 col-form-label" for="id">ID</label>
                             <div className="col-sm-10">
@@ -164,14 +222,14 @@ export default class BookUpdate extends React.Component {
 
                         <div className="form-group input-group mt-3">
                             <label className="col-sm-2 col-form-label" for="title">Название книги</label>
-                            <input className="form-control" type="text" id="title" name="title" defaultValue={this.state.title} onChange={this.handleChange.bind(this)}/>
+                            <input className="form-control" type="text" id="title" name="title" defaultValue={this.state.title} onChange={this.handleChange.bind(this)} required />
                         </div>
                         {
                             this.state.authors.map(author =>
                                 <div key={author.id} className="input-group-append mt-3 mb-3">
                                     <label className="col-sm-2 col-form-label">Автор</label>
-                                    <input className="form-control" id={author.id} name={author.id}
-                                           defaultValue={author.authorName} onChange={this.handleAuthorChange.bind(this, author.id)}/>
+                                    <input className="form-control" id={author.id} name={author.id} required
+                                           defaultValue={author.authorName} onChange={this.handleAuthorChange.bind(this, author.id)} />
                                     {
                                         this.showDeleteAuthorButton() &&
 
@@ -183,12 +241,12 @@ export default class BookUpdate extends React.Component {
                             )
                         }
                         {
-                            this.state.genres.map( genre =>
+                            this.state.genres.map(genre =>
                             <div key={genre.id} className="input-group-append mt-3 mb-3">
                                 <label className="col-sm-2 col-form-label">Жанр</label>
 
                                 <input className="form-control" id={genre.id} name={genre.id}
-                                       defaultValue={genre.genreTitle} onChange={this.handleGenreChange.bind(this, genre.id)}/>
+                                       defaultValue={genre.genreTitle} onChange={this.handleGenreChange.bind(this, genre.id)} required />
                                 {
                                     this.showDeleteGenreButton() &&
 
@@ -200,10 +258,42 @@ export default class BookUpdate extends React.Component {
                             )
                         }
 
-                        <button className="btn btn-success" onClick={this.saveBook}>Сохранить изменения</button>
+                        <hr/>
+
+                        <button className="btn btn-success mb-3" type="submit">Сохранить изменения</button>
+                        <button id="btnAddAuthor" className="btn btn-outline-secondary ml-3 mb-3" type="button" onClick={this.handleAddAuthor.bind(this)}>Добавить автора</button>
+                        <button id="btnAddGenre" className="btn btn-outline-secondary ml-3 mb-3" type="button" onClick={this.handleAddGenre.bind(this)}>Добавить жанр</button>
+                        <button id="btnShowComments" className="btn btn-outline-info ml-3 mb-3" type="button" onClick={this.toggleShowComments.bind(this)}>Комментарии</button>
                     </form>
+                    <hr/>
+                    <div className="container mt-3">
+
+                        {
+                            this.state.showComments ? (
+                                <div>
+                                    <div className="container>"><h5>Комментарии</h5></div>
+                                    {
+                                        this.state.commentsList.map(comment =>
+                                            <div className="container border border-info mb-1" key={comment.id}>
+                                                {comment.commentText}
+                                            </div>
+                                        )
+                                    }
+                                    {
+                                        this.showNoCommentsMessage() &&
+                                        <div className="container">К данной книге пока нет комментариев</div>
+                                    }
+                                </div>
+
+                            ) : null
+
+                        }
+                    </div>
                 </div>
             </React.Fragment>
         )
     }
 }
+
+//todo ВАЛИДАЦИЯ ФОРМ - ПУСТОЙ ИЛИ НЕТ
+//УДАЛЕНИЕ КНИГИ

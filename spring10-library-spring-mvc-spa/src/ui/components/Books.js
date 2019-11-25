@@ -38,7 +38,7 @@ export default class Books extends React.Component {
             <React.Fragment>
                 <div className={Books}>
                     <Helmet>
-                        <meta charSet="utf-8" />
+                        <meta charSet="utf-8"/>
                         <title>React Spring Library - Книги</title>
                     </Helmet>
                 </div>
@@ -50,7 +50,9 @@ export default class Books extends React.Component {
 
 
                 <div className="container float-left my-sm-3">
-                    <Link to={"/Books/Add"}><button className="btn btn-outline-secondary btn-sm">Новая книга</button></Link>
+                    <Link to={"/Books/Add"}>
+                        <button className="btn btn-outline-secondary btn-sm">Новая книга</button>
+                    </Link>
                 </div>
 
                 <div className="container mt-3 ml-3">
@@ -60,7 +62,7 @@ export default class Books extends React.Component {
                             <th>Название книги</th>
                             <th>Автор</th>
                             <th>Жанр</th>
-                            <th>act</th>
+                            <th>Действия</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -71,7 +73,9 @@ export default class Books extends React.Component {
                                     <td>{book.authors}</td>
                                     <td>{book.genres}</td>
                                     <td>
-                                        <button className="btn btn-success" onClick={() => this.editBook(book.id)}> Edit</button>
+                                        <button className="btn btn-success"
+                                                onClick={() => this.editBook(book.id)}> Edit
+                                        </button>
                                     </td>
                                 </tr>
                             )

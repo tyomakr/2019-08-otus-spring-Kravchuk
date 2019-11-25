@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.library.webmvc.domain.Book;
+import ru.otus.spring.library.webmvc.domain.Comment;
 import ru.otus.spring.library.webmvc.mapper.BookMapper;
 import ru.otus.spring.library.webmvc.rest.dto.BookDto;
 import ru.otus.spring.library.webmvc.rest.resp.ApiResponse;
 import ru.otus.spring.library.webmvc.service.AuthorService;
 import ru.otus.spring.library.webmvc.service.BookService;
+import ru.otus.spring.library.webmvc.service.CommentService;
 import ru.otus.spring.library.webmvc.service.GenreService;
 
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class BookController {
 
     private final BookService bookService;
+    private final CommentService commentService;
     private final BookMapper bookMapper;
 
     @GetMapping("/books")
@@ -48,5 +51,14 @@ public class BookController {
     @PutMapping("/books/update/")
     public ApiResponse<Book> updateBook(@RequestBody Book book) {
         return new ApiResponse<>(HttpStatus.OK.value(), bookService.updateBook(book));
+    }
+
+
+    @GetMapping("/books/{id}/comments/")
+    public ApiResponse<List<Comment>> getBookCommentsByBookId(@PathVariable("id") String id) {
+        Optional<Book> optionalBook = bookService.findById(id);
+        return optionalBook.<ApiResponse<List<Comment>>>map(book ->
+                new ApiResponse<>(HttpStatus.OK.value(), commentService.findAllCommentsByBookId(book.getId())))
+                .orElseGet(() -> new ApiResponse<>(HttpStatus.NO_CONTENT.value(), null));
     }
 }

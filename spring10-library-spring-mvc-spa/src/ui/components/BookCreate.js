@@ -4,16 +4,6 @@ import {Header} from "../fragments/Header";
 import ApiService from "../service/ApiService";
 
 
-function getDefaultState() {
-    return {
-        title: '',
-        authors: '',
-        genres: '',
-        message: null
-    };
-}
-
-
 export default class BookCreate extends React.Component {
 
     constructor(){
@@ -23,7 +13,6 @@ export default class BookCreate extends React.Component {
             title: "",
             authors: "",
             genres: "",
-            message: null
         }
     }
 
@@ -56,8 +45,6 @@ export default class BookCreate extends React.Component {
             .then(response => {
                 this.props.history.push('/Books');
             });
-
-        this.setState(getDefaultState());
     }
 
 
