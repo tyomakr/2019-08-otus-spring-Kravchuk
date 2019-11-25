@@ -21,6 +21,10 @@ export default new class ApiService {
         return axios.post('/api/v1/books/create', data)
     }
 
+    deleteBook(id) {
+        return axios.delete(API_URL + id)
+    }
+
     fetchCommentsByBook(id) {
         return axios.get(API_URL + window.localStorage.getItem(id) + '/comments/')
     }

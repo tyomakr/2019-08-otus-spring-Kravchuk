@@ -54,6 +54,13 @@ public class BookController {
     }
 
 
+    @RequestMapping(value = "/books/{id}", method = RequestMethod.DELETE)
+    public ApiResponse<Void> deleteBook(@PathVariable("id") String id) {
+        bookService.removeBook(id);
+        return new ApiResponse<>(HttpStatus.OK.value(),null);
+    }
+
+
     @GetMapping("/books/{id}/comments/")
     public ApiResponse<List<Comment>> getBookCommentsByBookId(@PathVariable("id") String id) {
         Optional<Book> optionalBook = bookService.findById(id);

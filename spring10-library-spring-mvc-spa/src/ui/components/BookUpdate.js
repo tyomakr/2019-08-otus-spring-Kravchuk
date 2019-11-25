@@ -1,11 +1,11 @@
-import React from 'react'
+import Formsy from 'formsy-react';
+import React from 'react';
 import {Helmet} from "react-helmet/es/Helmet";
 import {Header} from "../fragments/Header";
 import ApiService from "../service/ApiService";
 
 
 export default class BookUpdate extends React.Component {
-
 
     constructor(props) {
         super(props);
@@ -47,7 +47,7 @@ export default class BookUpdate extends React.Component {
 
     //сохранить книгу
     saveBook(e) {
-        e.preventDefault();
+
         let book = {
             id: this.state.id,
             title: this.state.title,
@@ -91,7 +91,7 @@ export default class BookUpdate extends React.Component {
 
 
     //изменение поля название книги
-    handleChange(e) {
+    handleTitleChange(e) {
         e.preventDefault();
         this.setState({[e.target.name] : e.target.value });
     }
@@ -164,7 +164,7 @@ export default class BookUpdate extends React.Component {
 
 
     //кнопка добавления автора
-    handleAddAuthor(e) {
+    handleAuthorAdd() {
 
         $('#btnAddAuthor').hide();
 
@@ -176,7 +176,7 @@ export default class BookUpdate extends React.Component {
 
 
     //кнопка добавления жанра
-    handleAddGenre(e) {
+    handleGenreAdd() {
 
         $('#btnAddGenre').hide();
 
@@ -187,13 +187,21 @@ export default class BookUpdate extends React.Component {
     }
 
 
+    //кнопка удаления книги
+    handleBookDelete(id) {
+
+        ApiService.deleteBook(id)
+            .then(response => {
+                this.props.history.push('/Books');
+            });
+    }
+
     //кнопка комментариев
-    toggleShowComments(e) {
+    toggleShowComments() {
 
         let res = this.state.showComments;
         this.setState({showComments: !res})
     };
-
 
 
     render() {
@@ -212,7 +220,7 @@ export default class BookUpdate extends React.Component {
                     <h2>Редактирование книги</h2>
                 </div>
                 <div className="container mt-3 ml-3">
-                    <form noValidate={true} onSubmit={this.saveBook.bind(this)}>
+                    <Formsy onValidSubmit={this.saveBook.bind(this)}>
                         <div className="form-group input-group mt-3">
                             <label className="col-sm-2 col-form-label" for="id">ID</label>
                             <div className="col-sm-10">
@@ -222,7 +230,7 @@ export default class BookUpdate extends React.Component {
 
                         <div className="form-group input-group mt-3">
                             <label className="col-sm-2 col-form-label" for="title">Название книги</label>
-                            <input className="form-control" type="text" id="title" name="title" defaultValue={this.state.title} onChange={this.handleChange.bind(this)} required />
+                            <input className="form-control" type="text" id="title" name="title" defaultValue={this.state.title} onChange={this.handleTitleChange.bind(this)} required />
                         </div>
                         {
                             this.state.authors.map(author =>
@@ -260,14 +268,14 @@ export default class BookUpdate extends React.Component {
 
                         <hr/>
 
-                        <button className="btn btn-success mb-3" type="submit">Сохранить изменения</button>
-                        <button id="btnAddAuthor" className="btn btn-outline-secondary ml-3 mb-3" type="button" onClick={this.handleAddAuthor.bind(this)}>Добавить автора</button>
-                        <button id="btnAddGenre" className="btn btn-outline-secondary ml-3 mb-3" type="button" onClick={this.handleAddGenre.bind(this)}>Добавить жанр</button>
+                        <button id="btnSubmit" className="btn btn-success mb-3" type="submit">Сохранить изменения</button>
+                        <button id="btnAddAuthor" className="btn btn-outline-secondary ml-3 mb-3" type="button" onClick={this.handleAuthorAdd.bind(this)}>Добавить автора</button>
+                        <button id="btnAddGenre" className="btn btn-outline-secondary ml-3 mb-3" type="button" onClick={this.handleGenreAdd.bind(this)}>Добавить жанр</button>
                         <button id="btnShowComments" className="btn btn-outline-info ml-3 mb-3" type="button" onClick={this.toggleShowComments.bind(this)}>Комментарии</button>
-                    </form>
+                        <button className="btn btn-outline-danger ml-3 mb-3" type="button" onClick={this.handleBookDelete.bind(this, this.state.id)}>УДАЛИТЬ КНИГУ</button>
+                    </Formsy>
                     <hr/>
                     <div className="container mt-3">
-
                         {
                             this.state.showComments ? (
                                 <div>
@@ -286,7 +294,6 @@ export default class BookUpdate extends React.Component {
                                 </div>
 
                             ) : null
-
                         }
                     </div>
                 </div>
@@ -295,5 +302,4 @@ export default class BookUpdate extends React.Component {
     }
 }
 
-//todo ВАЛИДАЦИЯ ФОРМ - ПУСТОЙ ИЛИ НЕТ
 //УДАЛЕНИЕ КНИГИ
