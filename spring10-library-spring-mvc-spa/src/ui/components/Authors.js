@@ -1,7 +1,7 @@
 import React from 'react'
 import {Helmet} from "react-helmet/es/Helmet";
 import {Header} from "../fragments/Header";
-
+import ApiService from "../service/ApiService";
 
 
 export default class Authors extends React.Component {
@@ -12,7 +12,7 @@ export default class Authors extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/api/v1/authors')
+        ApiService.fetchAllAuthors()
             .then(response => response.json())
             .then(authors => this.setState({authors}));
     }

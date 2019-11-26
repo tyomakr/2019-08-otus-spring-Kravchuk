@@ -1,7 +1,7 @@
 import React from 'react'
 import {Helmet} from "react-helmet/es/Helmet";
 import {Header} from "../fragments/Header";
-
+import ApiService from "../service/ApiService";
 
 
 export default class Genres extends React.Component {
@@ -12,7 +12,7 @@ export default class Genres extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/api/v1/genres')
+        ApiService.fetchAllGenres()
             .then(response => response.json())
             .then(genres => this.setState({genres}));
     }
@@ -24,7 +24,7 @@ export default class Genres extends React.Component {
             <React.Fragment>
                 <div className={Genres}>
                     <Helmet>
-                        <meta charSet="utf-8" />
+                        <meta charSet="utf-8"/>
                         <title>React Spring Library - Жанры</title>
                     </Helmet>
                 </div>

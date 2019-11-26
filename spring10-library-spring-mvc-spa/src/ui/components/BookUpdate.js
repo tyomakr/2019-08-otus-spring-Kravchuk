@@ -18,8 +18,6 @@ export default class BookUpdate extends React.Component {
             commentsList:[]
         };
         this.getBook = this.getBook.bind(this);
-        this.saveBook = this.saveBook.bind(this);
-
         this.loadComments = this.loadComments.bind(this);
     }
 
@@ -30,11 +28,11 @@ export default class BookUpdate extends React.Component {
     }
 
 
-    //Получение книг по rest
+    //Получение книги по rest
     getBook() {
         ApiService.fetchBook("id")
             .then((res) => {
-                let book = res.data.result.body;
+                let book = res.data;
                 this.setState({
                     id: book.id,
                     title: book.title,
@@ -46,8 +44,7 @@ export default class BookUpdate extends React.Component {
 
 
     //сохранить книгу
-    saveBook(e) {
-
+    saveBook() {
         let book = {
             id: this.state.id,
             title: this.state.title,
@@ -65,9 +62,8 @@ export default class BookUpdate extends React.Component {
     loadComments() {
         ApiService.fetchCommentsByBook("id")
             .then((res) => {
-                res.data.result;
                 this.setState({
-                    commentsList : res.data.result
+                    commentsList : res.data
                 })
             });
     }
@@ -86,7 +82,7 @@ export default class BookUpdate extends React.Component {
 
     //условие показа сообщения, если комментарии отсутствуют
     showNoCommentsMessage() {
-        return this.state.commentsList.length == 0;
+        return this.state.commentsList.length === 0;
     }
 
 
@@ -301,5 +297,3 @@ export default class BookUpdate extends React.Component {
         )
     }
 }
-
-//УДАЛЕНИЕ КНИГИ

@@ -6,11 +6,8 @@ import ru.otus.spring.library.webmvc.domain.Author;
 import ru.otus.spring.library.webmvc.domain.Book;
 import ru.otus.spring.library.webmvc.domain.Genre;
 import ru.otus.spring.library.webmvc.rest.dto.BookDto;
-import ru.otus.spring.library.webmvc.service.AuthorService;
-import ru.otus.spring.library.webmvc.service.GenreService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

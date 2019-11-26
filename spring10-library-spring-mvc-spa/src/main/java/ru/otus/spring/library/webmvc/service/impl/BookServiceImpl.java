@@ -63,63 +63,6 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public void addBookAuthor(String bookId, String bookAuthor) {
-
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        optionalBook.ifPresent(book -> {
-            Optional<Author> optionalAuthor = authorService.findById(bookAuthor);
-            optionalAuthor.ifPresent(author -> {
-                List<Author> al = book.getAuthors();
-                al.add(author);
-                book.setAuthors(al);
-                bookRepository.save(book);
-            });
-        });
-    }
-
-    @Override
-    public void removeBookAuthor(String bookId, String authorId) {
-
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        optionalBook.filter(book -> book.getAuthors().size() > 1)
-                .ifPresent(book -> {
-                    List<Author> al = new ArrayList<>(optionalBook.get().getAuthors());
-                    al.removeIf(author -> author.getId().equals(authorId));
-                    book.setAuthors(al);
-                    bookRepository.save(book);
-                });
-    }
-
-    @Override
-    public void addBookGenre(String bookId, String bookGenre) {
-
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        optionalBook.ifPresent(book -> {
-            Optional<Genre> optionalGenre = genreService.findById(bookGenre);
-            optionalGenre.ifPresent(genre -> {
-                List<Genre> gl = book.getGenres();
-                gl.add(genre);
-                book.setGenres(gl);
-                bookRepository.save(book);
-            });
-        });
-    }
-
-    @Override
-    public void removeBookGenre(String bookId, String bookGenre) {
-
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        optionalBook
-                .filter(book -> book.getGenres().size() > 1)
-                .ifPresent(book -> {
-                    List<Genre> gl = new ArrayList<>(optionalBook.get().getGenres());
-                    gl.removeIf(genre -> genre.getId().equals(bookGenre));
-                    book.setGenres(gl);
-                    bookRepository.save(book);
-                });
-    }
-
-    @Override
     public void removeBook(String bookId) {
         Optional<Book> bookOptional = bookRepository.findById(bookId);
         bookOptional.ifPresent(bookRepository::delete);

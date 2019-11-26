@@ -15,13 +15,5 @@ public interface BookService {
 
     Book updateBook(Book book);
 
-    void addBookAuthor(String bookId, String bookAuthor);
-
-    void removeBookAuthor(String bookId, String bookAuthor);
-
-    void addBookGenre(String bookId, String bookGenre);
-
-    void removeBookGenre(String bookId, String bookGenre);
-
     void removeBook(String bookId);
 }

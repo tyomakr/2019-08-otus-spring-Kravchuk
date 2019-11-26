@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {Helmet} from "react-helmet/es/Helmet";
 import {Header} from "../fragments/Header";
 import {Link} from "react-router-dom";
@@ -73,8 +73,8 @@ export default class Books extends React.Component {
                                     <td>{book.authors}</td>
                                     <td>{book.genres}</td>
                                     <td>
-                                        <button className="btn btn-success"
-                                                onClick={() => this.editBook(book.id)}> Edit
+                                        <button className="btn btn-outline-success"
+                                                onClick={() => this.editBook(book.id)}> Изменить
                                         </button>
                                     </td>
                                 </tr>
