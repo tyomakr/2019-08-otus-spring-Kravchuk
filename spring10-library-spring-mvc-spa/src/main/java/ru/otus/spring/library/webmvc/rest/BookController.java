@@ -5,13 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.library.webmvc.domain.Book;
 import ru.otus.spring.library.webmvc.domain.Comment;
-import ru.otus.spring.library.webmvc.mapper.BookMapper;
 import ru.otus.spring.library.webmvc.rest.dto.BookDto;
 import ru.otus.spring.library.webmvc.service.BookService;
 import ru.otus.spring.library.webmvc.service.CommentService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,11 +20,11 @@ public class BookController {
 
     private final BookService bookService;
     private final CommentService commentService;
-    private final BookMapper bookMapper;
 
     @GetMapping("/books")
     public ResponseEntity<List<BookDto>> getAllBooks() {
-        return ResponseEntity.ok(bookMapper.domainToDto(bookService.findAll()));
+        return ResponseEntity.ok(bookService.findAll().stream().map(BookDto::toDto)
+                .collect(Collectors.toList()));
     }
 
 
@@ -41,7 +41,7 @@ public class BookController {
     }
 
 
-    @PutMapping("/books/update")
+    @PutMapping("/books")
     public ResponseEntity<Book> updateBook(@RequestBody Book book) {
         return ResponseEntity.ok(bookService.updateBook(book));
     }

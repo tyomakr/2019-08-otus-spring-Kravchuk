@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.spring.library.webmvc.repository.AuthorRepository;
 import ru.otus.spring.library.webmvc.rest.dto.AuthorDto;
+import ru.otus.spring.library.webmvc.service.AuthorService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1")
 public class AuthorController {
 
-    private final AuthorRepository authorRepository;
+    private final AuthorService authorService;
 
     @GetMapping("/authors")
     public ResponseEntity<List<AuthorDto>> getAllAuthors() {
-        return ResponseEntity.ok(authorRepository.findAll().stream().map(AuthorDto::toDto)
+        return ResponseEntity.ok(authorService.findAll().stream().map(AuthorDto::toDto)
                 .collect(Collectors.toList()));
     }
 }

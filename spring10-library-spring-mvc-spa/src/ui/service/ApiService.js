@@ -18,7 +18,7 @@ export default new class ApiService {
     }
 
     saveBook(book) {
-        return axios.put(API_BOOKS_URL + 'update/', book);
+        return axios.put(API_BOOKS_URL, book);
     }
 
     createBook(data) {

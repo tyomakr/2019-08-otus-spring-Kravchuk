@@ -38,8 +38,7 @@ public class BookServiceImpl implements BookService {
         Author author = authorService.findOrCreateAuthor(bookAuthor);
         Genre genre = genreService.findOrCreateGenre(bookGenre);
 
-        bookRepository.save(new Book(bookTitle, author, genre));
-        return null;
+        return bookRepository.save(new Book(bookTitle, author, genre));
     }
 
 
