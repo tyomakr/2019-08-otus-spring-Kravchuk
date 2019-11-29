@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Document(collection = "books")
 @Data
@@ -30,12 +29,6 @@ public class Book {
     private List<Genre> genres;
 
 
-    public Book(String title) {
-        this.title = title;
-        authors = new ArrayList<>();
-        genres = new ArrayList<>();
-    }
-
     public Book(String bookName, List<Author> authors, List<Genre> genres) {
         this.title = bookName;
         this.authors = authors;
@@ -48,14 +41,4 @@ public class Book {
         authors = new ArrayList<>(Collections.singletonList(author));
         genres = new ArrayList<>(Collections.singletonList(genre));
     }
-
-    public String authorsToString() {
-        return authors.stream().map(Author::getAuthorName).collect(Collectors.joining(" / "));
-    }
-
-    public String genresToString() {
-        return genres.stream().map(Genre::getGenreTitle).collect(Collectors.joining(" / "));
-    }
-
-
 }
