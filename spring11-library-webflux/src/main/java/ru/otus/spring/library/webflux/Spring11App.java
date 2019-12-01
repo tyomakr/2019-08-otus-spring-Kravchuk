@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
-import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static org.springframework.web.reactive.function.server.ServerResponse.*;
 
 @SpringBootApplication
 public class Spring11App {
@@ -56,11 +55,10 @@ public class Spring11App {
                                         .flatMap(bookRepository::saveBook), Book.class)
                 )
                 .DELETE("/api/v1/books/{id}", accept(APPLICATION_JSON),
-                        request -> bookRepository.deleteById(request.pathVariable("id"))
-                            .flatMap(book -> ok().contentType(APPLICATION_JSON).build())
+                        request -> noContent().build(bookRepository.deleteById(request.pathVariable("id")))
                  )
 
-                .GET("/api/v1/books/{id}/comments", accept(APPLICATION_JSON),
+                .GET("/api/v1/books/{id}/comments/", accept(APPLICATION_JSON),
                         request -> ok().body(commentRepository.findAllByBook_Id(request.pathVariable("id")), Comment.class)
 
                 )

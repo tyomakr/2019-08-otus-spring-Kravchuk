@@ -18,7 +18,7 @@ public class BookEventListener extends AbstractMongoEventListener<Book> {
     public void onAfterDelete(AfterDeleteEvent<Book> event) {
         super.onAfterDelete(event);
         Document document = event.getSource();
-        String id = document.get("_id").toString();
+        String id = document.get("id").toString();
         commentRepository.removeAllCommentsFromBookByBookId(id);
     }
 }
