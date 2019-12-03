@@ -19,11 +19,9 @@ export default class App extends React.Component {
                 <Header history={this.props.history}/>
 
                 <div className="container mt-2 ml-2">
-                    <span><b>Современные приложения на Spring MVC</b></span>
+                    <span><b>Современные приложения на Spring WebFlux</b></span>
                     <ul>
-                        <li>Переписать приложение с использованием AJAX и REST-контроллеров</li>
-                        <li>Переписать приложение с классических View на AJAX архитектуру и REST-контроллеры.</li>
-                        <li>Опционально: Сделать SPA приложение на любом из Web-фреймоврков</li>
+                        <li>Вместо классического потока и embedded Web-сервера использовать WebFlux.</li>
                     </ul>
                 </div>
             </React.Fragment>

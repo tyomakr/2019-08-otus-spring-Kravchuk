@@ -2,7 +2,6 @@ package ru.otus.spring.library.webflux.rest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.otus.spring.library.webflux.domain.Author;
 
 @Data
 @AllArgsConstructor
