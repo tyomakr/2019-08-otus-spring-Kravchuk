@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:include="fragments/head">
+</head>
+
+<body>
+
+<header th:include="fragments/header"></header>
+
+<div class="container">
+    <main class="container" role="main">
+        <nav>
+            <div class="container">
+                <h1 class="mt-5" th:text="#{w.main.menu.books}">Books</h1>
+
+                <div sec:authorize="hasRole('ROLE_ADMIN')" class="container float-left my-sm-3">
+                    <button class="btn btn-outline-secondary btn-sm" data-target="#createBookModal" data-toggle="modal"
+                            th:text="#{bl.btn.add}" type="button">Add Book
+                    </button>
+                </div>
+
+                <!-- MODAL CREATE BOOK BEGIN -->
+                <div class="modal fade" aria-hidden="true" aria-labelledby="createBookModalLabel" id="createBookModal"
+                     role="dialog" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createBookModalLabel" th:text="#{bl.mod.add.header}">Add new book</h5>
+                                <button class="close" aria-label="Close" data-dismiss="modal" type="button">
+                                    <span aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/books/create" method="post">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" id="title" name="title" aria-describedby="titleHelp" required >
+                                        <small class="form-text text-muted" id="titleHelp"
+                                               th:text="#{b.mod.hint.title}">Please enter book title</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <input aria-describedby="authorHelp" class="form-control" id="author" name="author"
+                                               required type="text">
+                                        <small class="form-text text-muted" id="authorHelp"
+                                               th:text="#{b.mod.hint.author}">Please enter one book author</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <input aria-describedby="genreHelp" class="form-control" id="genre" name="genre"
+                                               required type="text">
+                                        <small class="form-text text-muted" id="genreHelp"
+                                               th:text="#{b.mod.hint.genre}">Please enter book genre</small>
+                                    </div>
+                                    <div class="float-right my-sm 1">
+                                        <button class="btn btn-primary" type="submit" th:text="#{b.mod.btn.save}">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" data-dismiss="modal" type="button" th:text="#{b.mod.btn.close}">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- MODAL CREATE BOOK END -->
+
+
+
+                <div class="container">
+                    <table class="table table-sm" id="booksList">
+                        <thead>
+                        <th scope="col" th:text="#{bl.book.title}">Book Title</th>
+                        <th scope="col" th:text="#{bl.book.author}">Author</th>
+                        <th scope="col" th:text="#{bl.book.genre}">Genre</th>
+                        </thead>
+                        <tbody>
+                        <tr th:each="book : ${bookList}">
+
+                            <td class="w-45"><a href="edit-book.html" th:href="@{/books/edit/(id=${book.id})}" th:text="${book.title}">Title</a></td>
+                            <td class="w-30" th:text="${book.authorsToString()}">authors</td>
+                            <td class="w-25" th:text="${book.genresToString()}">genres</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </nav>
+    </main>
+</div>
+
+<footer th:include="fragments/footer"></footer>
+
+
+</body>
+</html>
