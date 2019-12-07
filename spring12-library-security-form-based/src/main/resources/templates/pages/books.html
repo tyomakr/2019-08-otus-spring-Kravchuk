@@ -11,7 +11,7 @@
     <main class="container" role="main">
         <nav>
             <div class="container">
-                <h1 class="mt-5" th:text="#{w.main.menu.books}">Books</h1>
+                <h2 class="mt-5" th:text="#{w.main.menu.books}">Books</h2>
 
                 <div sec:authorize="hasRole('ROLE_ADMIN')" class="container float-left my-sm-3">
                     <button class="btn btn-outline-secondary btn-sm" data-target="#createBookModal" data-toggle="modal"
@@ -74,7 +74,10 @@
                         <tbody>
                         <tr th:each="book : ${bookList}">
 
-                            <td class="w-45"><a href="edit-book.html" th:href="@{/books/edit/(id=${book.id})}" th:text="${book.title}">Title</a></td>
+                            <td class="w-45">
+                                <a sec:authorize="hasRole('ROLE_ADMIN')" href="edit-book.html" th:href="@{/books/edit/(id=${book.id})}" th:text="${book.title}">Title</a>
+                                <a sec:authorize="hasRole('ROLE_USER')" href="view-book.html" th:href="@{/books/view/(id=${book.id})}" th:text="${book.title}">Title</a>
+                            </td>
                             <td class="w-30" th:text="${book.authorsToString()}">authors</td>
                             <td class="w-25" th:text="${book.genresToString()}">genres</td>
                         </tr>

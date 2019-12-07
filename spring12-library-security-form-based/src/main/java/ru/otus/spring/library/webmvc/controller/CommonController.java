@@ -21,4 +21,10 @@ public class CommonController {
         model.addAttribute("pageTitle", "Information page");
         return "pages/info";
     }
+
+    @GetMapping("/login")
+    public String getLoginPage(Model model) {
+        model.addAttribute("pageTitle", "Login page");
+        return "pages/login";
+    }
 }

@@ -15,12 +15,18 @@ public class WebErrorController implements ErrorController {
         model.addAttribute("pageTitle", "ERROR PAGE");
         model.addAttribute("errStatus", response.getStatus());
 
-        return "pages/error";
+        return "errors/error";
     }
-
 
     @Override
     public String getErrorPath() {
         return "/error";
+    }
+
+
+    @GetMapping("/error-403")
+    public String getError403Page(Model model) {
+        model.addAttribute("pageTitle", "ACCESS ERROR");
+        return "errors/error-403";
     }
 }

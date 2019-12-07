@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Контроллер CommonController должен")
 class CommonControllerTest {
 
-    private static final String HEADER_PART_TEXT = "CRUD приложение с Web UI и хранением данных в БД";
+    private static final String HEADER_PART_TEXT = "CRUD приложение Spring Security";
 
     @Autowired
     private MockMvc mockMvc;

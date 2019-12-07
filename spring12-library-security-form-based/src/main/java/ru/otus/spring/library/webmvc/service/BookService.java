@@ -11,7 +11,7 @@ public interface BookService {
 
     Optional<Book> findById(String bookId);
 
-    void insertBook(String bookTitle, String bookAuthor, String bookGenre);
+    Book insertBook(String bookTitle, String bookAuthor, String bookGenre);
 
     void updateBookTitle(Book book);
 

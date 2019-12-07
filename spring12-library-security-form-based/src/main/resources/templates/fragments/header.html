@@ -34,24 +34,6 @@
                         <li class="dropdown-item" sec:authentication="name"></li>
                         <li class="dropdown-item"><a href="/logout">Выход</a></li>
                     </ul>
-                    <!--                    <a sec:authorize="isAnonymous()" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" th:text="#{w.main.menu.user.h.n.logged}"> <b class="caret"></b></a>-->
-<!--                    <a sec:authorize="isAuthenticated()" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" th:text="#{w.main.menu.user.h.logged}"> <b class="caret"></b></a>-->
-<!--                    <ul class="dropdown-menu">-->
-
-<!--                        &lt;!&ndash; Если не залогинен &ndash;&gt;-->
-<!--                        <div sec:authorize="isAnonymous()">-->
-<!--                            <li class="user-menu-text user-menu-msg" >Вы не залогинены</li>-->
-<!--                            <li class="user-menu-text"><a class="user-menu-link" href="/loginForm" >Вход</a></li>-->
-<!--                        </div>-->
-
-<!--                        &lt;!&ndash; Если залогинен &ndash;&gt;-->
-<!--                        <div sec:authorize="!isAnonymous()">-->
-<!--                            <li class="user-menu-text user-menu-msg" th:text="#{userMenu-msg-signed}"></li>-->
-<!--                            <li class="user-menu-text user-menu-uName" sec:authentication="name"></li>-->
-<!--                            <li class="dropdown-divider"></li>-->
-<!--                            <li class="user-menu-text nav-item"><a class="user-menu-link" href="/logout" th:text="#{userMenu-link-signOut}"></a></li>-->
-<!--                        </div>-->
-<!--                    </ul>-->
                 </li>
             </ul>
         </div>

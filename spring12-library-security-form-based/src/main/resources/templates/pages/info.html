@@ -8,9 +8,9 @@
 <header th:include="fragments/header"></header>
 
 <div class="container">
-    <main role="main" class="container" xmlns:th="http://www.w3.org/1999/xhtml">
+    <main role="main" class="container">
         <nav>
-            <h1 class="mt-5" th:text="#{w.main.menu.info}">Info</h1>
+            <h2 class="mt-5" th:text="#{w.main.menu.info}">Info</h2>
 
             <div class="container" sec:authorize="isAnonymous()">
                 <div class="container font-weight-bold">Вы не вошли в систему</div>

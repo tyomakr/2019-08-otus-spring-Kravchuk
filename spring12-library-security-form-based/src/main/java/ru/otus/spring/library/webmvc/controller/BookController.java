@@ -37,6 +37,18 @@ public class BookController {
     }
 
 
+    @GetMapping("/books/view")
+    public String getViewBookPage(@RequestParam("id") String bookId, Model model) {
+        Optional<Book> optionalBook = bs.findById(bookId);
+        optionalBook.ifPresent(book -> {
+            model.addAttribute("pageTitle", msgService.getMsg("vb.page.header"));
+            model.addAttribute("bookCommentsList", cs.findAllCommentsByBookId(bookId));
+            model.addAttribute(book);
+        });
+        return "pages/view-book";
+    }
+
+
     @GetMapping("/books/edit")
     public String getEditBookPage(@RequestParam("id") String bookId, Model model) {
         Optional<Book> optionalBook = bs.findById(bookId);

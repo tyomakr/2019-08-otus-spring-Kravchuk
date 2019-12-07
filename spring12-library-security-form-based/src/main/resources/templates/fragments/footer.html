@@ -4,7 +4,6 @@
             <span sec:authorize="isAuthenticated()">
                 | Вы вошли как: <span sec:authentication="name"></span>
                 | Роли : <span sec:authentication="principal.authorities"></span>
-                | <a th:href="@{/logout}">Выйти</a>
             </span>
         </nav>
     </div>

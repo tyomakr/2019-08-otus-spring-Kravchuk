@@ -34,11 +34,11 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public void insertBook(String bookTitle, String bookAuthor, String bookGenre) {
+    public Book insertBook(String bookTitle, String bookAuthor, String bookGenre) {
         Author author = authorService.findOrCreateAuthor(bookAuthor);
         Genre genre = genreService.findOrCreateGenre(bookGenre);
 
-        bookRepository.save(new Book(bookTitle, author, genre));
+        return bookRepository.save(new Book(bookTitle, author, genre));
     }
 
 
