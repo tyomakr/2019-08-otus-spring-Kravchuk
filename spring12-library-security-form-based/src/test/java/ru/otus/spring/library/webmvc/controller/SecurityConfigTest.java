@@ -2,6 +2,8 @@ package ru.otus.spring.library.webmvc.controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -57,38 +59,13 @@ public class SecurityConfigTest {
     }
 
 
-    @Test
-    @DisplayName("запретить доступ пользователю с ROLE_USER, при попытке запросить редактирование книги")
+    @ParameterizedTest
+    @ValueSource(strings = {"/books/edit", "/books/create", "/books/remove/" + "testBookId"})
+    @DisplayName("запретить доступ пользователю с ROLE_USER, в ответ на запросы, разрешенные только для ROLE_ADMIN")
     @WithMockUser(authorities = "ROLE_USER")
-    void forbiddenRoleUserBookEdit() throws Exception {
+    void forbiddenRoleUserParamTest(String apiUrl) throws Exception {
 
-        mockMvc.perform(get("/books/edit"))
-                .andDo(print())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/error-403"))
-                .andReturn();
-    }
-
-
-    @Test
-    @DisplayName("запретить доступ пользователю с ROLE_USER, при попытке запросить создание книги")
-    @WithMockUser(authorities = "ROLE_USER")
-    void forbiddenRoleUserBookCreate() throws Exception {
-
-        mockMvc.perform(post("/books/create"))
-                .andDo(print())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/error-403"))
-                .andReturn();
-    }
-
-
-    @Test
-    @DisplayName("запретить доступ пользователю с ROLE_USER, при попытке запросить удаление книги")
-    @WithMockUser(authorities = "ROLE_USER")
-    void forbiddenRoleUserBookRemove() throws Exception {
-
-        mockMvc.perform(post("/books/remove/" + "testBookId"))
+        mockMvc.perform(post(apiUrl))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/error-403"))
