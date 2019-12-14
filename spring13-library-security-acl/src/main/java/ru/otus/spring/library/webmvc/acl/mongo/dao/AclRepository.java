@@ -16,6 +16,8 @@
 package ru.otus.spring.library.webmvc.acl.mongo.dao;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import org.springframework.stereotype.Repository;
 import ru.otus.spring.library.webmvc.acl.mongo.domain.MongoAcl;
 
 import java.io.Serializable;
@@ -28,6 +30,7 @@ import java.util.Optional;
  * @author Roman Vottner
  * @since 4.3
  */
+@Repository
 public interface AclRepository extends MongoRepository<MongoAcl, Serializable> {
 
     /**

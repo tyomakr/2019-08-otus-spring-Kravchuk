@@ -18,9 +18,25 @@ package ru.otus.spring.library.webmvc.acl.mongo.mongodb;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.security.acls.domain.*;
+import org.springframework.security.acls.domain.AccessControlEntryImpl;
+import org.springframework.security.acls.domain.AclAuthorizationStrategy;
+import org.springframework.security.acls.domain.AclImpl;
+import org.springframework.security.acls.domain.AuditLogger;
+import org.springframework.security.acls.domain.DefaultPermissionFactory;
+import org.springframework.security.acls.domain.DefaultPermissionGrantingStrategy;
+import org.springframework.security.acls.domain.GrantedAuthoritySid;
+import org.springframework.security.acls.domain.ObjectIdentityImpl;
+import org.springframework.security.acls.domain.PermissionFactory;
+import org.springframework.security.acls.domain.PrincipalSid;
 import org.springframework.security.acls.jdbc.LookupStrategy;
-import org.springframework.security.acls.model.*;
+import org.springframework.security.acls.model.AccessControlEntry;
+import org.springframework.security.acls.model.Acl;
+import org.springframework.security.acls.model.AclCache;
+import org.springframework.security.acls.model.MutableAcl;
+import org.springframework.security.acls.model.ObjectIdentity;
+import org.springframework.security.acls.model.Permission;
+import org.springframework.security.acls.model.PermissionGrantingStrategy;
+import org.springframework.security.acls.model.Sid;
 import org.springframework.security.util.FieldUtils;
 import org.springframework.util.Assert;
 import ru.otus.spring.library.webmvc.acl.mongo.domain.DomainObjectPermission;
@@ -28,7 +44,14 @@ import ru.otus.spring.library.webmvc.acl.mongo.domain.MongoAcl;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.springframework.data.mongodb.core.query.Query.query;
 
@@ -46,12 +69,6 @@ import static org.springframework.data.mongodb.core.query.Query.query;
  */
 public class BasicLookupStrategy implements LookupStrategy {
 
-    /**
-     * Used to add respective user permissions on a domain object to an ACL instance as the setter requires elevated
-     * permission and the actual list returned is a copy and hence adding the permission to the list does not work that
-     * way
-     **/
-    private final Field fieldAces = FieldUtils.getField(AclImpl.class, "aces");
     /**
      * Spring template for interacting with a MongoDB database
      **/
@@ -74,10 +91,18 @@ public class BasicLookupStrategy implements LookupStrategy {
      * Used to convert the int value containing the permission value back to a permission object used by Spring security
      **/
     private PermissionFactory permissionFactory = new DefaultPermissionFactory();
+
     /**
      * The number of ACLs retrieved at maximum in one go
      **/
     private int batchSize = 50;
+
+    /**
+     * Used to add respective user permissions on a domain object to an ACL instance as the setter requires elevated
+     * permission and the actual list returned is a copy and hence adding the permission to the list does not work that
+     * way
+     **/
+    private final Field fieldAces = FieldUtils.getField(AclImpl.class, "aces");
 
     public BasicLookupStrategy(MongoTemplate mongoTemplate, AclCache aclCache,
                                AclAuthorizationStrategy aclAuthorizationStrategy,
@@ -175,7 +200,7 @@ public class BasicLookupStrategy implements LookupStrategy {
             types.add(domainObject.getType());
         }
         Criteria where = Criteria.where("instanceId").in(objectIds).and("className").in(types);
-        List<MongoAcl> foundAcls = mongoTemplate.find(query(where).with(Sort.by(Sort.Direction.ASC, "instanceId", "permissions.position")), MongoAcl.class);
+        List <MongoAcl> foundAcls = mongoTemplate.find(query(where).with(Sort.by(Sort.Direction.ASC, "instanceId", "permissions.position")), MongoAcl.class);
 
         Map<ObjectIdentity, Acl> resultMap = new HashMap<>();
 

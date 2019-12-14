@@ -19,14 +19,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.jdbc.LookupStrategy;
-import org.springframework.security.acls.model.*;
+import org.springframework.security.acls.model.AccessControlEntry;
+import org.springframework.security.acls.model.Acl;
+import org.springframework.security.acls.model.AclService;
+import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.security.acls.model.ObjectIdentity;
+import org.springframework.security.acls.model.Sid;
 import org.springframework.util.Assert;
 import ru.otus.spring.library.webmvc.acl.mongo.dao.AclRepository;
 import ru.otus.spring.library.webmvc.acl.mongo.domain.MongoAcl;
 
-
 import java.lang.invoke.MethodHandles;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Simple MongoDB-based implementation of {@link AclService}.
@@ -43,8 +51,10 @@ import java.util.*;
 public class MongoDBAclService implements AclService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final LookupStrategy lookupStrategy;
+
     protected AclRepository aclRepository;
+
+    private final LookupStrategy lookupStrategy;
 
     public MongoDBAclService(AclRepository aclRepository, LookupStrategy lookupStrategy) {
         Assert.notNull(aclRepository, "AclRepository required");

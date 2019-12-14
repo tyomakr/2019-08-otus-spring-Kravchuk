@@ -179,33 +179,12 @@ public class MongoAcl {
     }
 
     /**
-     * Specifies whether parent access permisssions should be taken into account when evaluating user access permissions
-     * on a domain object.
-     *
-     * @param inheritPermissions <em>true</em> if parent permissions should be evaluated on user access of the domain
-     *                           object; <em>false</em> if only the permissions by this ACL should be reconsidered on
-     *                           evaluating access permissions
-     */
-    public void setInheritPermissions(boolean inheritPermissions) {
-        this.inheritPermissions = inheritPermissions;
-    }
-
-    /**
      * Returns the unique identifier of the parent ACL instance if specified.
      *
      * @return The unique identifier of the parent ACL or null if no parent was specified
      */
     public Serializable getParentId() {
         return this.parentId;
-    }
-
-    /**
-     * Specifies the unique identifier of the parent ACL.
-     *
-     * @param parentId The unique identifier of the parent ACL
-     */
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
     }
 
     /**
@@ -218,12 +197,33 @@ public class MongoAcl {
     }
 
     /**
+     * Specifies the unique identifier of the parent ACL.
+     *
+     * @param parentId The unique identifier of the parent ACL
+     */
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    /**
      * Specifies the user permissions on the domain object monitored by this ACL instance.
      *
      * @param permissions The user permissions on the domain object
      */
     public void setPermissions(List<DomainObjectPermission> permissions) {
         this.permissions = permissions;
+    }
+
+    /**
+     * Specifies whether parent access permisssions should be taken into account when evaluating user access permissions
+     * on a domain object.
+     *
+     * @param inheritPermissions <em>true</em> if parent permissions should be evaluated on user access of the domain
+     *                           object; <em>false</em> if only the permissions by this ACL should be reconsidered on
+     *                           evaluating access permissions
+     */
+    public void setInheritPermissions(boolean inheritPermissions) {
+        this.inheritPermissions = inheritPermissions;
     }
 
     @Override
