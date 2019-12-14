@@ -14,7 +14,6 @@ import ru.otus.spring.library.webmvc.acl.mongo.domain.DomainObjectPermission;
 import ru.otus.spring.library.webmvc.acl.mongo.domain.MongoAcl;
 import ru.otus.spring.library.webmvc.acl.mongo.domain.MongoSid;
 import ru.otus.spring.library.webmvc.domain.*;
-import ru.otus.spring.library.webmvc.service.AclService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,8 +32,6 @@ public class DatabaseChangelog {
     private final List<Genre> genreList = new ArrayList<>();
     private final List<Book> bookList = new ArrayList<>();
     private final List<User> userList = new ArrayList<>();
-
-    private final AclService aclService;
 
     private final MongoSid sidRoleAdmin = new MongoSid(ROLE_ADMIN, false);
     private final MongoSid sidRoleUser = new MongoSid(ROLE_USER, false);
