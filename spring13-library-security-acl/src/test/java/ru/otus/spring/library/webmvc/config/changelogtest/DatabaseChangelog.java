@@ -34,8 +34,6 @@ public class DatabaseChangelog {
     private final List<Book> bookList = new ArrayList<>();
     private final List<User> userList = new ArrayList<>();
 
-    private final AclService aclService;
-
     private final MongoSid sidRoleAdmin = new MongoSid(ROLE_ADMIN, false);
     private final MongoSid sidRoleUser = new MongoSid(ROLE_USER, false);
 
