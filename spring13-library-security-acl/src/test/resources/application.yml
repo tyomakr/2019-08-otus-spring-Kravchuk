@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost
+      database: libmongotest
+      port: 0
+
+
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8

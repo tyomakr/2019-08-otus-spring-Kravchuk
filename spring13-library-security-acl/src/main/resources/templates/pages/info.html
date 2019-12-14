@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:include="fragments/head">
+</head>
+
+<body>
+
+<header th:include="fragments/header"></header>
+
+<div class="container">
+    <main role="main" class="container">
+        <nav>
+            <h2 class="mt-5" th:text="#{w.main.menu.info}">Info</h2>
+
+            <div class="container" sec:authorize="isAnonymous()">
+                <div class="container font-weight-bold">Вы не вошли в систему</div>
+            </div>
+            <div class="container" sec:authorize="isAuthenticated()">
+                <div>Вы вошли как: </div>
+                <div sec:authentication="name" class="font-weight-bold"></div>
+            </div>
+            <hr/>
+
+            <div class="container">
+                <div class="container font-weight-bold">Данные для входа</div>
+                <div class="container">Пользователь: admin / Пароль: pass</div>
+                <div class="container">Пользователь: user / Пароль: pass</div>
+            </div>
+            <hr/>
+
+            <div class="container">
+                <div class="container">Анонимному пользователю доступны страницы:
+                    <ul>
+                        <li>Авторы</li>
+                        <li>Жанры</li>
+                        <li>Информация</li>
+                    </ul>
+                </div>
+                <div class="container">Пользователю user доступны дополнительно страницы:
+                    <ul>
+                        <li>Книги</li>
+                        <li>Просмотр данных книги</li>
+                    </ul>
+                </div>
+                <div class="container">Пользователю admin доступны дополнительно страницы
+                    <ul>
+                        <li>Добавление новой книги</li>
+                        <li>Редактирование данных книги</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </main>
+</div>
+
+<footer th:include="fragments/footer"></footer>
+
+</body>
+</html>
