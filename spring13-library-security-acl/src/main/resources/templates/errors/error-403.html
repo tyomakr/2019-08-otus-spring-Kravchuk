@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:include="fragments/head">
+</head>
+
+<body>
+
+<header th:include="fragments/header"></header>
+
+<div class="container">
+    <main role="main" class="container" xmlns:th="http://www.w3.org/1999/xhtml">
+        <nav>
+            <h2 class="mt-5">ОШИБКА</h2>
+            <h3 class="mt-5 mb-5 text-danger">ДОСТУП ЗАПРЕЩЕН</h3>
+        </nav>
+    </main>
+</div>
+
+<footer th:include="fragments/footer"></footer>
+
+
+</body>
+</html>

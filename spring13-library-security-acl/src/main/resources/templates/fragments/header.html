@@ -1,0 +1,42 @@
+<header xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="header">
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="/">Spring Library</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/books" th:text="#{w.main.menu.books}">Книжки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/authors" th:text="#{w.main.menu.authors}">Авторы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/genres" th:text="#{w.main.menu.genres}">Жанры</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/info" th:text="#{w.main.menu.info}">Инфо</a>
+                </li>
+            </ul>
+
+            <!-- Блок меню, расположенный справа -->
+            <ul class="navbar-nav navbar-right">
+                <li class="dropdown nav-item">
+                    <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{w.main.menu.user.header}">User menu</a>
+                    <ul sec:authorize="isAnonymous()" class="dropdown-menu">
+                        <li class="dropdown-item">Аноним</li>
+                        <li class="dropdown-item"><a href="/login">Войти</a></li>
+                    </ul>
+                    <ul sec:authorize="isAuthenticated()" class="dropdown-menu">
+                        <li class="dropdown-item" sec:authentication="name"></li>
+                        <li class="dropdown-item"><a href="/logout">Выход</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+</header>

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:include="fragments/head">
+</head>
+
+<body>
+
+<header th:include="fragments/header"></header>
+
+<div class="container">
+    <main role="main" class="container">
+        <nav>
+            <h2 class="mt-5" th:text="#{login.header}">login</h2>
+            <div class="container">
+               <form th:action="@{/login}" method="post">
+                   <div class="form-group">
+                       <input class="form-control" type="text" id="username" name="username"
+                              aria-describedby="usernameHelp" autofocus="true" required>
+                       <small class="form-text text-muted" id="usernameHelp"
+                              th:text="#{login.hint.username}">Please enter username</small>
+                   </div>
+                   <div class="form-group">
+                       <input class="form-control" type="password" id="password" name="password"
+                              aria-describedby="passwordHelp" required>
+                       <small class="form-text text-muted" id="passwordHelp"
+                              th:text="#{login.hint.password}">Please enter password</small>
+                   </div>
+
+                   <div th:if="${param.error}" class="row">
+                       <div class="container">
+                            <div class="col col-block alert alert-danger" th:text="#{login.bad}">Invalid credentials</div>
+                       </div>
+                   </div>
+
+                   <div class="row">
+                       <div class="container">
+                            <div class="col-p-3 mb-5">
+                                <input class="btn btn-primary" type="submit" th:value="#{login.btn}" value="Enter"/>
+                            </div>
+                       </div>
+                   </div>
+               </form>
+            </div>
+        </nav>
+    </main>
+</div>
+
+<footer th:include="fragments/footer"></footer>
+
+</body>
+</html>
