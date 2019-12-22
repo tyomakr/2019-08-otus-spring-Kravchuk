@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0006-comments-data
+      author: tyomakr
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: commentid
+        file: data/comments.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: comments

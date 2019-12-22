@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0006-comments
+      author: tyomakr
+      createTable:
+        tableName: comments
+        columns:
+          - column:
+              name: commentid
+              type: BIGINT
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_comment
+          - column:
+              name: bookid
+              type: BIGINT
+              constraints:
+                nullable: false
+                foreignKeyName: fk_comments
+                references: books(bookid)
+                deleteCascade: true
+          - column:
+              name: commenttext
+              type: varchar(1000)
+              constraints:
+                nullable: false
