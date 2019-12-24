@@ -2,10 +2,11 @@ package ru.otus.spring.migration.shell;
 
 import lombok.RequiredArgsConstructor;
 import org.h2.tools.Console;
+import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 import ru.otus.spring.migration.service.BatchService;
-import ru.otus.spring.migration.service.IOService;
 
 import java.sql.SQLException;
 
@@ -14,8 +15,6 @@ import java.sql.SQLException;
 public class ShellCommands {
 
     private final BatchService batchService;
-    private final IOService ioService;
-
 
     /*CONSOLE*/
     @ShellMethod(value = "Показать консоль H2", key = {"h2", "c", "console"})
@@ -28,21 +27,28 @@ public class ShellCommands {
     }
 
     @ShellMethod(value = "Запуск миграции", key = {"start", "run", "1"})
+    @ShellMethodAvailability("runAvailabilityCheck")
     private void runMigration() {
-        if (!batchService.isWasLaunched()) {
-            batchService.launchJob();
-        } else {
-            ioService.printMsg("Миграция уже была ранее запущена. Для перезапуска введите restart");
-        }
+        batchService.launchJob();
 
     }
 
     @ShellMethod(value = "Перезапуск миграции", key = {"restart", "rerun", "2"})
+    @ShellMethodAvailability("restartAvailabilityCheck")
     private void restartMigration() {
-        if (batchService.isWasLaunched()) {
-            batchService.restartJob();
-        } else {
-            ioService.printMsg("Миграция ранее не запускалась. Для начала миграции введите run");
-        }
+        batchService.restartJob();
     }
+
+
+    private Availability runAvailabilityCheck() {
+        String msg = "Миграция уже была ранее запущена. Для перезапуска введите restart";
+        return batchService.isWasLaunched() ? Availability.unavailable(msg) : Availability.available();
+    }
+
+
+    private Availability restartAvailabilityCheck() {
+        String msg = "Миграция ранее не запускалась. Для начала миграции введите run";
+        return batchService.isWasLaunched() ? Availability.available() : Availability.unavailable(msg);
+    }
+
 }
