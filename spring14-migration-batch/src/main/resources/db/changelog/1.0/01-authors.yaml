@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0001-author
+      author: tyomakr
+      createTable:
+        tableName: authors
+        columns:
+          - column:
+              name: authorid
+              type: BIGINT
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_authors
+
+          - column:
+              name: authorname
+              type: varchar(200)
+              constraints:
+                unique: true
