@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.otus.spring</groupId>
-    <artifactId>migration-batch</artifactId>
+    <artifactId>spring14-migration-batch</artifactId>
     <version>0.1</version>
     <name>spring14-migration-batch</name>
     <description>Batch Migration</description>
