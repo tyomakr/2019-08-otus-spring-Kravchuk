@@ -1,0 +1,30 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost
+      port: 27017
+      database: libmongo
+
+    rest:
+      base-path: /api/v1
+
+server:
+  port: 8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /monitor
+
+  endpoint:
+    health:
+      show-details: always
+
+
+
+logging:
+    file:
+      path: ./spring16-actuator/logs/
+      name: ${logging.file.path}/applog.log
