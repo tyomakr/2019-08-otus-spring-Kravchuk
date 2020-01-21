@@ -1,0 +1,45 @@
+version: '3'
+services:
+
+  mongodb:
+    image: mongo
+    container_name: mongodb17
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - nw1
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    container_name: backend
+    restart: always
+    ports:
+      - 8888:8888
+    networks:
+      - nw1
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: 
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    container_name: frontreact
+    restart: always
+    ports:
+    - 80:80
+    - 443:443
+    depends_on:
+      - backend
+    networks:
+      - nw1
+
+networks:
+  nw1:
+    external: false
+
+
+
