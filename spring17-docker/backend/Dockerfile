@@ -16,8 +16,8 @@ FROM openjdk:8-alpine
 ENV PROJECT_DIR=/opt/project
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
-COPY --from=mvn opt/backend/target/spring17-docker* $PROJECT_DIR/
+COPY --from=mvn opt/backend/target/spring17-docker*.jar $PROJECT_DIR/spring17-docker.jar
 
 EXPOSE 8888
 
-CMD ["java", "-jar", "/opt/project/spring17-docker-0.1.jar"]
+CMD ["java", "-jar", "/opt/project/spring17-docker.jar"]
